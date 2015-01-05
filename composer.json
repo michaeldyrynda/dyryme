@@ -24,7 +24,8 @@
 		],
 		"post-update-cmd": [
 			"php artisan clear-compiled",
-			"php artisan optimize"
+			"php artisan optimize",
+		  	"php artisan ide-helper:generate"
 		],
 		"post-create-project-cmd": [
 			"php artisan key:generate"
@@ -33,5 +34,8 @@
 	"config": {
 		"preferred-install": "dist"
 	},
-	"minimum-stability": "stable"
+	"minimum-stability": "stable",
+	"require-dev": {
+		"barryvdh/laravel-ide-helper": "~1.11"
+	}
 }
