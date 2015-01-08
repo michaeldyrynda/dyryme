@@ -9,24 +9,24 @@
  * @author     Michael Dyrynda <michael@iatstuti.net>
  */
 
-class LinkController
-{
-    public function index()
-    {
-        return \View::make('home');
-    }
+class LinkController extends \BaseController {
+
+	public function index()
+	{
+		return \View::make('home');
+	}
 
 
-    public function create()
-    {
-        return \View::make('create');
-    }
+	public function create()
+	{
+		return \View::make('create');
+	}
 
 
-    public function store()
-    {
-        // TODO: implement store method
-    }
+	public function store()
+	{
+		\Event::fire('link.creating', $input);
+	}
 
 
 }

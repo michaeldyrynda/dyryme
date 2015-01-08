@@ -1,5 +1,4 @@
-<?php namespace app/
-Dyryme;
+<?php namespace Dyryme\Models;
 
 use Eloquent;
 
