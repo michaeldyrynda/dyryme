@@ -14,12 +14,12 @@ return array(
 	*/
 
 	'debug' => true,
-	'providers' => [
+	'providers' => append_config([
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 		'Clockwork\Support\Laravel\ClockworkServiceProvider',
-	],
-	'aliases' => [
+	]),
+	'aliases' => append_config([
 		'Clockwork' => 'Clockwork\Support\Laravel\Facade',
-	],
+	]),
 
 );
