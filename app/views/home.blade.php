@@ -6,8 +6,12 @@
         {{ Form::open(array( 'route' => 'store', 'method' => 'post', )) }}
         <div class="form-group">
             {{ Form::text('url', null, array( 'class' => 'form-control', 'id' => 'url', 'placeholder' => 'URL to shorten', )) }}
-            {{ Form::button('Shorten!', array( 'class' => 'btn btn-primary hidden', 'type' => 'submit', )) }}
+            {{ $errors->first('url', '<div class="error">:message</div>') }}
         </div>
         {{ Form::close() }}
+
+        @if ( Session::has('hash') )
+            <output>{{ link_to(Session::get('hash')) }}</output>
+        @endif
     </div>
 @stop
