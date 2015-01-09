@@ -67,4 +67,30 @@ class LinkRepository {
 	}
 
 
+	/**
+	 * Make a hash for a url
+	 *
+	 * If the URL already exists, return the corresponding hash
+	 * Ensure we don't duplicate hash values, causing validation errors, before returning a hash
+	 *
+	 * @param $url
+	 *
+	 * @return string
+	 */
+	public function makeHash($url)
+	{
+		if ( ! is_null($link = $this->lookupByUrl($url)) )
+		{
+			return [ $link->hash, true ];
+		}
+
+		do
+		{
+			$hash = \Str::random(5);
+		} while ( ! is_null($this->lookupByHash($hash)));
+
+		return [ $hash, false ];
+	}
+
+
 }
