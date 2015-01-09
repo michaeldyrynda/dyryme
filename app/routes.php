@@ -11,11 +11,6 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('home');
-});
-
-
+Route::get('/', [ 'as' => 'home', 'uses' => 'Dyryme\Controllers\LinkController@index', ]);
 Route::post('store', [ 'as' => 'store', 'uses' => 'Dyryme\Controllers\LinkController@store', ]);
 Route::get('{hash}', [ 'as' => 'redirect', 'uses' => 'Dyryme\Controllers\LinkController@rediret', ]);
