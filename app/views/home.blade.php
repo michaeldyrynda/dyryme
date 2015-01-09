@@ -4,9 +4,9 @@
     <div class="col-md-6 col-md-offset-3">
         <h2 class="text-center">dyry.me link shortener</h2>
         {{ Form::open(array( 'route' => 'store', 'method' => 'post', )) }}
-        <div class="form-group">
+        <div class="form-group @if ( $errors->has('url') ) has-error @endif">
             {{ Form::text('url', null, array( 'class' => 'form-control', 'id' => 'url', 'placeholder' => 'URL to shorten', )) }}
-            {{ $errors->first('url', '<div class="error">:message</div>') }}
+            {{ $errors->first('url', '<span class="help-block">:message</span>') }}
         </div>
         {{ Form::close() }}
 
