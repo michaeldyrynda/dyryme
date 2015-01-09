@@ -10,8 +10,8 @@
         </div>
         {{ Form::close() }}
 
-        @if ( Session::has('hash') )
-            <output>{{ link_to(Session::get('hash')) }}</output>
+        @if ( isset($hash) )
+            <output>{{ link_to($hash) }}</output>
         @endif
     </div>
 @stop
