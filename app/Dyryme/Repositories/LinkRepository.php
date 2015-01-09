@@ -54,4 +54,17 @@ class LinkRepository {
 	}
 
 
+	/**
+	 * Store a link record
+	 *
+	 * @param $input
+	 *
+	 * @return static
+	 */
+	public function store($input)
+	{
+		return $this->model->create($input);
+	}
+
+
 }
