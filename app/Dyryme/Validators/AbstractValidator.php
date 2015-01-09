@@ -22,6 +22,8 @@ abstract class AbstractValidator {
 
 
 	/**
+	 * @param $input
+	 *
 	 * @return bool
 	 * @throws ValidationFailedException
 	 */
