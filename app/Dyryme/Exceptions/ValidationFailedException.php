@@ -11,13 +11,13 @@
 
 class ValidationFailedException extends \Exception {
 
-	protected $errors = [ ];
+	protected $errors;
 
 
 	/**
 	 * @param array $errors
 	 */
-	function __construct(array $errors)
+	function __construct($errors)
 	{
 		$this->errors = $errors;
 	}
