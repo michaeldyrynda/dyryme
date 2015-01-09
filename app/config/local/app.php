@@ -16,6 +16,10 @@ return array(
 	'debug' => true,
 	'providers' => [
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+		'Clockwork\Support\Laravel\ClockworkServiceProvider',
+	],
+	'aliases' => [
+		'Clockwork' => 'Clockwork\Support\Laravel\Facade',
 	],
 
 );
