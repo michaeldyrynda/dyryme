@@ -15,7 +15,7 @@ class ValidationFailedException extends \Exception {
 
 
 	/**
-	 * @param array $errors
+	 * @param $errors
 	 */
 	function __construct($errors)
 	{
