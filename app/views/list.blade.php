@@ -1,13 +1,13 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="col-md-10 col-md-offset-1">
+    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h2 class="panel-title">Stored Links</h2>
             </div>
 
-            <table class="table table-striped table-small">
+            <table class="table table-striped table-condensed">
                 <thead>
                 <tr>
                     <th>Hash</th>
@@ -27,3 +27,4 @@
             {{ $links->links() }}
         </div>
     </div>
+@stop
