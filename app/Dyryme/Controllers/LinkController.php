@@ -63,7 +63,7 @@ class LinkController extends \BaseController {
 	 */
 	public function store()
 	{
-		$url = \Input::get('url');
+		$url = \Input::get('longUrl');
 		list( $hash, $existing ) = $this->linkRepository->makeHash($url);
 
 		if ( ! $existing )
