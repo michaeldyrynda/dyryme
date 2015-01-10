@@ -19,7 +19,7 @@ class CreateHitLog extends Migration {
 			$table->bigInteger('remoteAddress')->nullable();
 			$table->string('hostname')->nullable();
 			$table->string('userAgent')->nullable();
-			$table->string('referrer')->nullable();
+			$table->string('referer')->nullable();
 			$table->nullableTimestamps();
 
 			$table->foreign('link_id')->references('id')->on('links')->onDelete('cascade')->onUpdate('cascade');
