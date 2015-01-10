@@ -47,6 +47,36 @@ class LinkRepository {
 
 
 	/**
+	 * Get top links ordered by hits
+	 *
+	 * @param int $count
+	 *
+	 * @return array|\Illuminate\Database\Eloquent\Collection|static[]
+	 */
+	public function getTopLinks($count = 5)
+	{
+		return $this->model->whereHas('hits', function ($query)
+		{
+			$query->where('count(*)', '>', 0)->orderByRaw('count(*) desc');
+		})->take($count)->get();
+	}
+
+
+	/**
+	 * Get top creators grouped by remote address
+	 *
+	 * @param int $count
+	 *
+	 * @return array|\Illuminate\Database\Eloquent\Collection|static[]
+	 */
+	public function getTopCreators($count = 5)
+	{
+		return $this->model->select('remoteAddress',
+			\DB::raw('count(*) as count'))->groupBy('remoteAddress')->orderByRaw('count(*) desc')->take($count)->get();
+	}
+
+
+	/**
 	 * Find a link by it's id
 	 *
 	 * @param $id
@@ -128,6 +158,7 @@ class LinkRepository {
 			{
 				$link->restore();
 			}
+
 			return [ $link->hash, true ];
 		}
 
