@@ -28,18 +28,16 @@ class HitLogRepository {
 
 
 	/**
-	 * @param $input
-	 *
 	 * @return static
 	 */
-	public function store($input)
+	public function store()
 	{
-		$input = array_merge($input, [
+		$input = [
 			'remoteAddress' => $this->remoteClient->getIpAddress(),
 			'hostname'      => $this->remoteClient->getHostname(),
 			'userAgent'     => $this->remoteClient->getUserAgent(),
 			'referrer'      => $this->remoteClient->getReferrer(),
-		]);
+		];
 
 		return $this->model->create($input);
 	}
