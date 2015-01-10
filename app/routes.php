@@ -13,12 +13,23 @@
 
 Route::when('*', 'csrf', [ 'patch', 'post', 'put', ]);
 
+
 Route::get('/', [ 'as' => 'create', 'uses' => 'Dyryme\Controllers\LinkController@create', ]);
 Route::post('store', [ 'as' => 'store', 'uses' => 'Dyryme\Controllers\LinkController@store', ]);
-Route::get('list', [ 'as' => 'list', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@index', ]);
-Route::delete('link/{id}', [ 'as' => 'link.destroy', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@destroy', ]);
-Route::put('link/{id}', [ 'as' => 'link.activate', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@activate', ]);
+
+// Authenticated link routes
+Route::group([ 'prefix' => 'link', 'before' => 'auth', ], function ()
+{
+	Route::get('list', [ 'as' => 'list', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@index', ]);
+	Route::delete('{id}', [ 'as' => 'link.destroy', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@destroy', ]);
+	Route::put('{id}', [ 'as' => 'link.activate', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@activate', ]);
+	Route::get('{id}/hits', [ 'as' => 'link.hits', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@hits', ]);
+});
+
+// Authentication routes
 Route::get('login', [ 'as' => 'login', 'uses' => 'Dyryme\Controllers\AuthController@login', ]);
 Route::post('login', [ 'as' => 'authenticate', 'uses' => 'Dyryme\Controllers\AuthController@authenticate', ]);
 Route::get('logout', [ 'as' => 'logout', 'uses' => 'Dyryme\Controllers\AuthController@logout', ]);
+
+// Wildcard redirect routes
 Route::get('{hash}', [ 'as' => 'redirect', 'uses' => 'Dyryme\Controllers\LinkController@redirect', ]);

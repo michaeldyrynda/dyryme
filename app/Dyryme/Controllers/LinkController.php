@@ -147,4 +147,22 @@ class LinkController extends \BaseController {
 	}
 
 
+	/**
+	 * @param $linkId
+	 *
+	 * @return $this|\Illuminate\Http\RedirectResponse
+	 */
+	public function hits($linkId)
+	{
+		if ( ! ( $link = $this->linkRepository->lookupById($linkId) ) )
+		{
+			return \Redirect::route('list')->with([ 'flash_message' => 'Could not find specified link', ]);
+		}
+
+		$hits = $link->hits()->paginate(40);
+
+		return \View::make('hits')->with(compact('link', 'hits'));
+	}
+
+
 }
