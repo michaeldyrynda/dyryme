@@ -11,6 +11,8 @@
 class AuthController extends \BaseController {
 
 	/**
+	 * Display login form
+	 *
 	 * @return \Illuminate\View\View
 	 */
 	public function login()
@@ -20,6 +22,21 @@ class AuthController extends \BaseController {
 
 
 	/**
+	 * Logout method
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function logout()
+	{
+		\Auth::logout();
+
+		return \Redirect::route('create');
+	}
+
+
+	/**
+	 * Authenticate a user
+	 *
 	 * @return $this
 	 */
 	public function authenticate()
