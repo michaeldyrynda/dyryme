@@ -52,5 +52,7 @@
     <script src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="//cdn.jsdelivr.net/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+    @yield('foot_scripts')
   </body>
 </html>
