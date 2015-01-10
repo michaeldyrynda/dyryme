@@ -48,6 +48,17 @@ class LinkController extends \BaseController {
 
 
 	/**
+	 * @return mixed
+	 */
+	public function index()
+	{
+		$links = $this->linkRepository->getAllForList();
+
+		return \View::make('list')->withLinks($links);
+	}
+
+
+	/**
 	 * Store a url in the database
 	 */
 	public function store()
@@ -97,6 +108,42 @@ class LinkController extends \BaseController {
 		$this->hitLogRepository->store($link);
 
 		return \Redirect::to($link->url);
+	}
+
+
+	/**
+	 * @param $id
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function destroy($id)
+	{
+		if ( ! $this->linkRepository->lookupById($id)->delete() )
+		{
+			$flash_message = 'Could not delete link with id ' . htmlspecialchars($id);
+		}
+
+		$flash_message = 'Successfully deleted link with id ' . htmlspecialchars($id);
+
+		return \Redirect::to('list')->with(compact('flash_message'));
+	}
+
+
+	/**
+	 * @param $id
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function activate($id)
+	{
+		if ( ! $this->linkRepository->lookupById($id)->restore() )
+		{
+			$flash_message = 'Could not restore link with id ' . htmlspecialchars($id);
+		}
+
+		$flash_message = 'Successfully restored link with id ' . htmlspecialchars($id);
+
+		return \Redirect::to('list')->with(compact('flash_message'));
 	}
 
 
