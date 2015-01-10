@@ -57,7 +57,7 @@ class LinkRepository {
 	{
 		return $this->model->whereHas('hits', function ($query)
 		{
-			$query->where('count(*)', '>', 0)->orderByRaw('count(*) desc');
+			$query->where(\DB::raw('count(*)'), '>', 0)->orderByRaw('count(*) desc');
 		})->take($count)->get();
 	}
 
