@@ -1,6 +1,7 @@
 <?php namespace Dyryme\Repositories;
 
 use Dyryme\Models\HitLog;
+use Dyryme\Models\Link;
 use Dyryme\Utilities\RemoteClient;
 
 class HitLogRepository {
@@ -28,18 +29,20 @@ class HitLogRepository {
 
 
 	/**
+	 * @param Link $link
+	 *
 	 * @return static
 	 */
-	public function store()
+	public function store(Link $link)
 	{
-		$input = [
+		$hit = $this->model->create([
 			'remoteAddress' => $this->remoteClient->getIpAddress(),
 			'hostname'      => $this->remoteClient->getHostname(),
 			'userAgent'     => $this->remoteClient->getUserAgent(),
 			'referrer'      => $this->remoteClient->getReferrer(),
-		];
+		]);
 
-		return $this->model->create($input);
+		return $link->hits()->attach($hit);
 	}
 
 }
