@@ -96,7 +96,7 @@ class LinkController extends \BaseController {
 
 		$this->hitLogRepository->store($link);
 
-		return \Redirect::url($link->url);
+		return \Redirect::to($link->url);
 	}
 
 
