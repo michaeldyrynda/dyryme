@@ -88,7 +88,7 @@ class RemoteClient {
 	{
 		$hostname  = gethostbyaddr($this->ipAddress);
 
-		$this->hostname = ( $hostname === false || $hostname == $ipAddress ) ? null : $hostname;
+		$this->hostname = ( $hostname === false || $hostname == $this->ipAddress ) ? null : $hostname;
 	}
 
 
