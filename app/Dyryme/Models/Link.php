@@ -43,7 +43,7 @@ class Link extends Eloquent {
 	 */
 	public function setRemoteAddressAttribute($value)
 	{
-		$this->parameters['remoteAddress'] = ip2long($value) ?: null;
+		$this->attributes['remoteAddress'] = ip2long($value) ?: null;
 	}
 
 
