@@ -47,6 +47,19 @@ class LinkRepository {
 
 
 	/**
+	 * Find a link by it's id
+	 *
+	 * @param $id
+	 *
+	 * @return \Illuminate\Support\Collection|null|static
+	 */
+	public function lookupById($id)
+	{
+		return $this->model->find($id);
+	}
+
+
+	/**
 	 * Find a link by it's URL
 	 *
 	 * @param $url
