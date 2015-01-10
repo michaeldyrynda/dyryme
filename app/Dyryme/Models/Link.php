@@ -14,4 +14,14 @@ class Link extends Eloquent {
 
 	protected $fillable = [ 'hash', 'url', 'remoteAddress', 'hostname', 'userAgent' ];
 
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function hits()
+	{
+		return $this->hasMany('Dyryme\Models\HitLog');
+	}
+
+
 }
