@@ -15,11 +15,11 @@ class CreateHitLog extends Migration {
 		Schema::create('hit_log', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('link_id')->unsigned();
-			$table->bigInteger('remoteAddress')->nullable();
-			$table->string('hostname')->nullable();
-			$table->string('userAgent')->nullable();
-			$table->string('referer')->nullable();
+			$table->integer('link_id')->unsigned()->nullable()->default(null);
+			$table->bigInteger('remoteAddress')->nullable()->default(null);
+			$table->string('hostname')->nullable()->default(null);
+			$table->string('userAgent')->nullable()->default(null);
+			$table->string('referer')->nullable()->default(null);
 			$table->nullableTimestamps();
 
 			$table->foreign('link_id')->references('id')->on('links')->onDelete('cascade')->onUpdate('cascade');
