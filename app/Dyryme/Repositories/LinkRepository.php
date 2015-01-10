@@ -38,6 +38,15 @@ class LinkRepository {
 
 
 	/**
+	 * @return \Illuminate\Pagination\Paginator
+	 */
+	public function getAllForList()
+	{
+		return $this->model->with('hits')->orderBy('created_at', 'desc')->paginate(30);
+	}
+
+
+	/**
 	 * Find a link by it's URL
 	 *
 	 * @param $url
