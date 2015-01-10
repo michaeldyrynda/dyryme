@@ -56,8 +56,6 @@ class LinkController extends \BaseController {
 		$popular  = $this->linkRepository->getTopLinks();
 		$creators = $this->linkRepository->getTopCreators();
 
-		var_dump(\DB::getQueryLog());
-
 		return \View::make('list')->with(compact('links', 'popular', 'creators'));
 	}
 
