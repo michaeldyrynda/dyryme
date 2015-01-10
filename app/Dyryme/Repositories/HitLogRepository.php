@@ -42,7 +42,7 @@ class HitLogRepository {
 			'referer'       => $this->remoteClient->getReferer(),
 		]);
 
-		return $link->hits()->attach($hit);
+		return $link->hits()->save($hit);
 	}
 
 }
