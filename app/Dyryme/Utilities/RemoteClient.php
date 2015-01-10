@@ -76,10 +76,8 @@ class RemoteClient {
 	 */
 	private function setIpAddress()
 	{
-		$remote = isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ? array_pop(explode(',',
+		$this->ipAddress = isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ? array_pop(explode(',',
 			$_SERVER['HTTP_X_FORWARDED_FOR'])) : $_SERVER['REMOTE_ADDR'];
-
-		$this->ipAddress = ip2long($remote) !== false ? ip2long($remote) : null;
 	}
 
 
@@ -88,8 +86,7 @@ class RemoteClient {
 	 */
 	private function setHostname()
 	{
-		$ipAddress = long2ip($this->ipAddress);
-		$hostname  = gethostbyaddr($ipAddress);
+		$hostname  = gethostbyaddr($this->ipAddress);
 
 		$this->hostname = ( $hostname === false || $hostname == $ipAddress ) ? null : $hostname;
 	}
