@@ -42,7 +42,7 @@ class LinkRepository {
 	 */
 	public function getAllForList()
 	{
-		return $this->model->with('hits')->orderBy('created_at', 'desc')->paginate(30);
+		return $this->model->withTrashed()->with('hits')->orderBy('created_at', 'desc')->paginate(30);
 	}
 
 
