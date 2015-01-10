@@ -55,6 +55,13 @@ class LinkRepository {
 	}
 
 
+	public function getTopCreators($count = 5)
+	{
+		return $this->model->select('remoteAddress',
+			\DB::raw('count(*) as count'))->groupBy('remoteAddress')->orderByRaw('count(*) desc')->take($count)->get();
+	}
+
+
 	/**
 	 * Find a link by it's id
 	 *

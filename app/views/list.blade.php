@@ -25,6 +25,28 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Most Active Creators</h2>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-condensed">
+                        <thead>
+                        <tr>
+                            <th>IP Address</th>
+                            <th>Links</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @each('_link_most_active', $creators, 'link', 'raw|<tr><th colspan="2">No information available</th></tr>')
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="row">
