@@ -62,12 +62,19 @@ class LinkRepository {
 	/**
 	 * Find a link by it's URL
 	 *
-	 * @param $url
+	 * @param      $url
+	 * @param bool $trashed
 	 *
 	 * @return mixed
 	 */
-	public function lookupByUrl($url)
+	public function lookupByUrl($url, $trashed = false)
 	{
+		// If we should look for trashed URLs, too
+		if ( $trashed )
+		{
+			return $this->model->withTrashed()->where('url', $url)->first();
+		}
+
 		return $this->model->where('url', $url)->first();
 	}
 
@@ -115,8 +122,12 @@ class LinkRepository {
 	public function makeHash($url)
 	{
 		// If the URL already exists, return the corresponding hash
-		if ( ! is_null($link = $this->lookupByUrl($url)) )
+		if ( ! is_null($link = $this->lookupByUrl($url, true)) )
 		{
+			if ( $link->trashed() )
+			{
+				$link->restore();
+			}
 			return [ $link->hash, true ];
 		}
 
