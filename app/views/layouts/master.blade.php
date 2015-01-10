@@ -16,12 +16,32 @@
       <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
+  <body @if ( Auth::check() ) style="margin-top: 70px" @endif>
     @if ( Session::has('flash_message') )
       <div class="alert alert-info alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         {{ Session::get('flash_message') }}
       </div>
+    @endif
+
+    @if ( Auth::check() )
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            {{ link_to_route('create', 'dyry.me', null, [ 'class' => 'navbar-brand', ]) }}
+          </div>
+
+          <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav">
+              <li @if ( Route::currentRouteName() == 'list' ) class="active" @endif>{{ link_to_route('list', 'List') }}</li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><p class="navbar-text">Signed in as {{ Auth::user()->username }}</p></li>
+              <li><a href="{{ route('logout') }}"><span class="glyphicon glyphicon-off"></span></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     @endif
 
     <div class="container-fluid">
