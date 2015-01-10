@@ -1,7 +1,6 @@
 <?php namespace Dyryme\Controllers;
 
 use Dyryme\Repositories\LinkRepository;
-use Dyryme\Utilities\RemoteClient;
 use Dyryme\Validators\ValidationFailedException;
 
 /**
@@ -19,21 +18,15 @@ class LinkController extends \BaseController {
 	 */
 	private $repository;
 
-	/**
-	 * @var RemoteClient
-	 */
-	private $remoteClient;
-
 
 	/**
 	 * @param LinkRepository $repository
 	 */
-	function __construct(LinkRepository $repository, RemoteClient $remoteClient)
+	function __construct(LinkRepository $repository)
 	{
 		parent::__construct();
 
 		$this->repository   = $repository;
-		$this->remoteClient = $remoteClient;
 	}
 
 
@@ -60,11 +53,7 @@ class LinkController extends \BaseController {
 			{
 				\Event::fire('link.creating', [ compact('url', 'hash') ]);
 
-				$remoteAddress = $this->remoteClient->getIpAddress();
-				$hostname      = $this->remoteClient->getHostname();
-				$userAgent     = $this->remoteClient->getUserAgent();
-
-				$hash = $this->repository->store(compact('url', 'hash', 'remoteAddress', 'hostname', 'userAgent'))->hash;
+				$hash = $this->repository->store(compact('url', 'hash'))->hash;
 			}
 			catch (ValidationFailedException $e)
 			{

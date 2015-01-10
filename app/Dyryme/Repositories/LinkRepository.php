@@ -1,6 +1,7 @@
 <?php namespace Dyryme\Repositories;
 
 use Dyryme\Models\Link;
+use Dyryme\Utilities\RemoteClient;
 
 /**
  * Link repository
@@ -17,13 +18,22 @@ class LinkRepository {
 	 */
 	private $model;
 
+	/**
+	 * @var RemoteClient
+	 */
+	private $remoteClient;
+
 
 	/**
-	 * @param Link $model
+	 * @param Link         $model
+	 * @param RemoteClient $remoteClient
 	 */
-	function __construct(Link $model)
-	{
-		$this->model = $model;
+	function __construct(
+		Link $model,
+		RemoteClient $remoteClient
+	) {
+		$this->model        = $model;
+		$this->remoteClient = $remoteClient;
 	}
 
 
@@ -63,6 +73,12 @@ class LinkRepository {
 	 */
 	public function store($input)
 	{
+		$input = array_merge($input, [
+			'remoteAddress' => $this->remoteClient->getIpAddress(),
+			'hostname'      => $this->remoteClient->getHostname(),
+			'userAgent'     => $this->remoteClient->getUserAgent(),
+		]);
+
 		return $this->model->create($input);
 	}
 
