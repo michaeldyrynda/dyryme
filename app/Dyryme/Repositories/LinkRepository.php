@@ -46,6 +46,15 @@ class LinkRepository {
 	}
 
 
+	public function getTopLinks($count = 5)
+	{
+		return $this->model->whereHas('hits', function ($query)
+		{
+			$query->where('count(*)', '>', 0)->orderByRaw('count(*) desc');
+		})->take($count)->get();
+	}
+
+
 	/**
 	 * Find a link by it's id
 	 *
@@ -128,6 +137,7 @@ class LinkRepository {
 			{
 				$link->restore();
 			}
+
 			return [ $link->hash, true ];
 		}
 

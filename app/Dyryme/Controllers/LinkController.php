@@ -52,9 +52,10 @@ class LinkController extends \BaseController {
 	 */
 	public function index()
 	{
-		$links = $this->linkRepository->getAllForList();
+		$links   = $this->linkRepository->getAllForList();
+		$popular = $this->linkRepository->getTopLinks();
 
-		return \View::make('list')->withLinks($links);
+		return \View::make('list')->with(compact('links', 'popular'));
 	}
 
 
