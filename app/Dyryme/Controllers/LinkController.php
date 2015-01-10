@@ -68,4 +68,28 @@ class LinkController extends \BaseController {
 	}
 
 
+	/**
+	 * Perform a redirection for the given hash
+	 *
+	 * @param $hash
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function redirect($hash)
+	{
+		$link = $this->repository->lookupByHash($hash);
+
+		if ( ! $link )
+		{
+			return \Redirect::home()->with([
+				'flash_message' => 'The specified short url could not be found',
+			]);
+		}
+
+		$this->repository->logHit($hash);
+
+		return \Redirect::url($link->url);
+	}
+
+
 }
