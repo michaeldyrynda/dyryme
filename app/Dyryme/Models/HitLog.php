@@ -26,4 +26,24 @@ class HitLog extends Eloquent {
 	}
 
 
+	/**
+	 * @param $value
+	 *
+	 * @return null
+	 */
+	public function getRemoteAddressAttribute($value)
+	{
+		return long2ip($value) ?: null;
+	}
+
+
+	/**
+	 * @param $value
+	 */
+	public function setRemoteAddressAttribute($value)
+	{
+		$this->attributes['remoteAddress'] = ip2long($value) ?: null;
+	}
+
+
 }
