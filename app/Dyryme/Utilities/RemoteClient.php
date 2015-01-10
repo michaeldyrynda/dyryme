@@ -3,11 +3,25 @@
 
 class RemoteClient {
 
-	protected $ipAddress;
+	/**
+	 * @var string
+	 */
+	private $ipAddress;
 
-	protected $hostname;
+	/**
+	 * @var string
+	 */
+	private $hostname;
 
-	protected $userAgent;
+	/**
+	 * @var string
+	 */
+	private $userAgent;
+
+	/**
+	 * @var string
+	 */
+	private $referer;
 
 
 	/**
@@ -49,6 +63,15 @@ class RemoteClient {
 
 
 	/**
+	 * @return mixed
+	 */
+	public function getReferrer()
+	{
+		return $this->referrer;
+	}
+
+
+	/**
 	 * Set the IP address
 	 */
 	private function setIpAddress()
@@ -78,6 +101,15 @@ class RemoteClient {
 	private function setUserAgent()
 	{
 		$this->userAgent = $_SERVER['HTTP_USER_AGENT'] ?: null;
+	}
+
+
+	/**
+	 * Set the referer
+	 */
+	public function setReferrer()
+	{
+		$this->referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
 	}
 
 
