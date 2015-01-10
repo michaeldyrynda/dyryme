@@ -13,5 +13,7 @@
 
 Route::get('/', [ 'as' => 'create', 'uses' => 'Dyryme\Controllers\LinkController@create', ]);
 Route::post('store', [ 'as' => 'store', 'uses' => 'Dyryme\Controllers\LinkController@store', ]);
+Route::get('list', [ 'as' => 'list', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@index', ]);
+Route::get('login', [ 'as' => 'login', 'uses' => 'Dyryme\Controllers\AuthController@login', ]);
+Route::post('login', [ 'as' => 'authenticate', 'uses' => 'Dyryme\Controllers\AuthController@authenticate', ]);
 Route::get('{hash}', [ 'as' => 'redirect', 'uses' => 'Dyryme\Controllers\LinkController@redirect', ]);
-Route::get('list', [ 'as' => 'list', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@list', ]);
