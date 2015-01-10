@@ -1,5 +1,6 @@
 <?php namespace Dyryme\Controllers;
 
+use Dyryme\Repositories\HitLogRepository;
 use Dyryme\Repositories\LinkRepository;
 use Dyryme\Validators\ValidationFailedException;
 
@@ -16,17 +17,24 @@ class LinkController extends \BaseController {
 	/**
 	 * @var LinkRepository
 	 */
-	private $repository;
+	private $linkRepository;
+
+	/**
+	 * @var HitLogRepository
+	 */
+	private $hitLogRepository;
 
 
 	/**
-	 * @param LinkRepository $repository
+	 * @param LinkRepository   $linkRepository
+	 * @param HitLogRepository $hitLogRepository
 	 */
-	function __construct(LinkRepository $repository)
+	function __construct(LinkRepository $linkRepository, HitLogRepository $hitLogRepository)
 	{
 		parent::__construct();
 
-		$this->repository   = $repository;
+		$this->linkRepository   = $linkRepository;
+		$this->hitLogRepository = $hitLogRepository;
 	}
 
 
@@ -44,8 +52,8 @@ class LinkController extends \BaseController {
 	 */
 	public function store()
 	{
-		$url  = \Input::get('url');
-		list($hash, $existing) = $this->repository->makeHash($url);
+		$url = \Input::get('url');
+		list( $hash, $existing ) = $this->linkRepository->makeHash($url);
 
 		if ( ! $existing )
 		{
@@ -53,7 +61,7 @@ class LinkController extends \BaseController {
 			{
 				\Event::fire('link.creating', [ compact('url', 'hash') ]);
 
-				$hash = $this->repository->store(compact('url', 'hash'))->hash;
+				$hash = $this->linkRepository->store(compact('url', 'hash'))->hash;
 			}
 			catch (ValidationFailedException $e)
 			{
@@ -77,7 +85,7 @@ class LinkController extends \BaseController {
 	 */
 	public function redirect($hash)
 	{
-		$link = $this->repository->lookupByHash($hash);
+		$link = $this->linkRepository->lookupByHash($hash);
 
 		if ( ! $link )
 		{
@@ -86,7 +94,7 @@ class LinkController extends \BaseController {
 			]);
 		}
 
-		$this->repository->logHit($hash);
+		$this->hitLogRepository->store($link);
 
 		return \Redirect::url($link->url);
 	}
