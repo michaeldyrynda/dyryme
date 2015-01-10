@@ -33,7 +33,7 @@ class LinkController extends \BaseController {
 	/**
 	 * @return mixed
 	 */
-	public function index()
+	public function create()
 	{
 		return \View::make('home');
 	}
@@ -57,11 +57,11 @@ class LinkController extends \BaseController {
 			}
 			catch (ValidationFailedException $e)
 			{
-				return \Redirect::home()->withErrors($e->getErrors())->withInput();
+				return \Redirect::route('create')->withErrors($e->getErrors())->withInput();
 			}
 		}
 
-		return \Redirect::home()->with([
+		return \Redirect::route('create')->with([
 			'flash_message' => sprintf('Your URL has successfully been shortened to %s', link_to($hash)),
 			'hash'          => $hash,
 		]);
@@ -81,7 +81,7 @@ class LinkController extends \BaseController {
 
 		if ( ! $link )
 		{
-			return \Redirect::home()->with([
+			return \Redirect::route('create')->with([
 				'flash_message' => 'The specified short url could not be found',
 			]);
 		}
