@@ -46,6 +46,13 @@ class LinkRepository {
 	}
 
 
+	/**
+	 * Get top links ordered by hits
+	 *
+	 * @param int $count
+	 *
+	 * @return array|\Illuminate\Database\Eloquent\Collection|static[]
+	 */
 	public function getTopLinks($count = 5)
 	{
 		return $this->model->whereHas('hits', function ($query)
@@ -55,6 +62,13 @@ class LinkRepository {
 	}
 
 
+	/**
+	 * Get top creators grouped by remote address
+	 *
+	 * @param int $count
+	 *
+	 * @return array|\Illuminate\Database\Eloquent\Collection|static[]
+	 */
 	public function getTopCreators($count = 5)
 	{
 		return $this->model->select('remoteAddress',
