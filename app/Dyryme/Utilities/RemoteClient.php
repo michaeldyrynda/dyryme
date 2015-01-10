@@ -65,9 +65,9 @@ class RemoteClient {
 	/**
 	 * @return mixed
 	 */
-	public function getReferrer()
+	public function getReferer()
 	{
-		return $this->referrer;
+		return $this->referer;
 	}
 
 

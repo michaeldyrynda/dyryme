@@ -39,7 +39,7 @@ class HitLogRepository {
 			'remoteAddress' => $this->remoteClient->getIpAddress(),
 			'hostname'      => $this->remoteClient->getHostname(),
 			'userAgent'     => $this->remoteClient->getUserAgent(),
-			'referrer'      => $this->remoteClient->getReferrer(),
+			'referer'       => $this->remoteClient->getReferer(),
 		]);
 
 		return $link->hits()->attach($hit);
