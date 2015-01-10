@@ -55,7 +55,7 @@ class LinkRepository {
 	 */
 	public function lookupById($id)
 	{
-		return $this->model->find($id);
+		return $this->model->withTrashed()->find($id);
 	}
 
 
