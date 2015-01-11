@@ -55,10 +55,13 @@ class LinkRepository {
 	 */
 	public function getTopLinks($count = 5)
 	{
-		return $this->model->whereHas('hits', function ($query)
-		{
-			$query->orderByRaw('count(*) desc');
-		})->take($count)->get();
+		return $this->model
+			->join('hit_log', 'links.id', '=', 'hit_log.link_id')
+			->select('hash', 'url', 'links.created_at', \DB::raw('count(*) as count'))
+			->orderByRaw('count(*) desc')
+			->groupBy('hit_log.link_id')
+			->take($count)
+			->get();
 	}
 
 
