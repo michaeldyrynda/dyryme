@@ -97,7 +97,7 @@ class RemoteClient {
 	 */
 	private function setUserAgent()
 	{
-		$this->userAgent = isset($_SERVER['HTTP_USER_AGENT']) ?: null;
+		$this->userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null;
 	}
 
 

@@ -80,6 +80,24 @@ class LinkRepository {
 
 
 	/**
+	 * Get a daily breakdown of links created between two dates
+	 *
+     * @param DateTime $start
+     * @param DateTime $end
+	 *
+	 * @return array|\Illuminate\Database\Eloquent\Collection|static[]
+	 */
+    public function getDailyLinkBreakdown(\DateTime $start, \DateTime $end)
+    {
+        return $this->model->select(\DB::raw('DATE(created_at) as date'), \DB::raw('COUNT(*) as links'))
+            ->groupBy(\DB::raw('DATE(created_at)'))
+            ->orderBy('created_at', 'asc')
+            ->whereBetween('created_at', [ $start, $end, ])
+            ->get();
+    }
+
+
+	/**
 	 * Find a link by it's id
 	 *
 	 * @param $id
