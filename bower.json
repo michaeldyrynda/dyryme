@@ -1,0 +1,18 @@
+{
+  "name": "dyryme",
+  "version": "1",
+  "homepage": "https://github.com/deringer/dyryme",
+  "authors": [
+    "Michael Dyrynda <michael@iatstuti.net>"
+  ],
+  "description": "dyry.me link shortener",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
