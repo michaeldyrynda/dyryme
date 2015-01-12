@@ -1,5 +1,6 @@
 <?php namespace Dyryme\Validators;
 
+use Dyryme\Exceptions\ValidationFailedException;
 use Illuminate\Validation\Factory;
 
 /**

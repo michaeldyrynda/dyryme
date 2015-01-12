@@ -2,7 +2,7 @@
 
 use Dyryme\Repositories\HitLogRepository;
 use Dyryme\Repositories\LinkRepository;
-use Dyryme\Validators\ValidationFailedException;
+use Dyryme\Exceptions\ValidationFailedException;
 
 /**
  * Link controller
@@ -65,16 +65,21 @@ class LinkController extends \BaseController {
 	 */
 	public function store()
 	{
-		$url = \Input::get('longUrl');
-		list( $hash, $existing ) = $this->linkRepository->makeHash($url);
+        $input = \Input::only('longUrl', 'description');
+
+		list( $hash, $existing ) = $this->linkRepository->makeHash($input['longUrl']);
 
 		if ( ! $existing )
 		{
 			try
 			{
-				\Event::fire('link.creating', [ compact('url', 'hash') ]);
+				\Event::fire('link.creating', [ [ 'url' => $input['longUrl'], 'hash' => $hash, ] ]);
 
-				$hash = $this->linkRepository->store(compact('url', 'hash'))->hash;
+                $hash = $this->linkRepository->store([
+                    'url'         => $input['longUrl'],
+                    'description' => $input['description'],
+                    'hash'        => $hash,
+                ])->hash;
 			}
 			catch (ValidationFailedException $e)
 			{

@@ -15,7 +15,7 @@ class Link extends Eloquent {
 
 	use SoftDeletingTrait;
 
-	protected $fillable = [ 'hash', 'url', 'remoteAddress', 'hostname', 'userAgent' ];
+	protected $fillable = [ 'hash', 'url', 'description', 'remoteAddress', 'hostname', 'userAgent' ];
 
 
 	/**
@@ -45,6 +45,15 @@ class Link extends Eloquent {
 	{
 		$this->attributes['remoteAddress'] = ip2long($value) ?: null;
 	}
+
+
+    /**
+     * @param $value
+     */
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = trim($value) !== '' ? trim($value) : null;
+    }
 
 
 }

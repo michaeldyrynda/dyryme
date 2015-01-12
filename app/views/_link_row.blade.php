@@ -1,6 +1,7 @@
 <tr @if ( $link->trashed() )class="danger"@endif>
     <td>{{ link_to($link->hash, $link->hash) }} ({{ link_to_route('link.hits', $link->hits->count(), [ $link->id, ]) }})</td>
-    <td>{{ link_to($link->url, $link->url) }}</td>
+    <td><span data-toggle="tooltip" title="{{ $link->url }}">{{ link_to($link->url, str_limit($link->url, 50)) }}</td>
+    <td>{{{ $link->description or '<span class="text-muted">&ndash;</span>' }}}</td>
     <td>{{ $link->created_at }}</td>
     <td>
         {{ $link->remoteAddress or '<span class="text-muted">&ndash;</span>' }}<br >
