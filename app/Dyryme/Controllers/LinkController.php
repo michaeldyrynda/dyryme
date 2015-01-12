@@ -56,6 +56,23 @@ class LinkController extends \BaseController {
 		$popular  = $this->linkRepository->getTopLinks();
 		$creators = $this->linkRepository->getTopCreators();
 
+        $start = (new \DateTime())->sub(new \DateInterval('P7D'));
+        $end   = new \DateTime();
+
+        $dailyLinkBreakdown = $this->linkRepository->getDailyLinkBreakdown($start, $end);
+
+        $dailyLinksTable = \Lava::DataTable();
+        $dailyLinksTable->addDateColumn('Date')->addNumberColumn('New Links')->setTimezone('Australia/Adelaide');
+
+        foreach ($dailyLinkBreakdown as $day)
+        {
+            $dailyLinksTable->addRow([ $day->date, $day->links, ]);
+        }
+
+        $dailyLinksChart = \Lava::ColumnChart('DailyLinksChart')->setOptions([
+            'datatable' => $dailyLinksTable,
+        ]);
+
 		return \View::make('list')->with(compact('links', 'popular', 'creators'));
 	}
 
