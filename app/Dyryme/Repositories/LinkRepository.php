@@ -57,7 +57,7 @@ class LinkRepository {
 	{
 		return $this->model
 			->join('hit_log', 'links.id', '=', 'hit_log.link_id')
-			->select('hash', 'url', 'links.created_at', \DB::raw('count(*) as count'))
+			->select('links.id', 'hash', 'url', 'links.created_at', \DB::raw('count(*) as count'))
 			->orderByRaw('count(*) desc')
 			->groupBy('hit_log.link_id')
 			->take($count)
