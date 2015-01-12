@@ -6,9 +6,13 @@
             <h2 class="text-center">dyry.me link shortener</h2>
             {{ Form::open(array( 'route' => 'store', 'method' => 'post', )) }}
             <div class="form-group @if ( $errors->has('url') ) has-error @endif">
-                {{ Form::text('longUrl', null, array( 'class' => 'form-control input-lg', 'id' => 'url', 'placeholder' => 'Enter URL to shorten', )) }}
+                {{ Form::text('longUrl', null, array( 'class' => 'form-control input-lg', 'id' => 'url', 'placeholder' => 'Enter URL to shorten', 'required' => 'required', )) }}
                 {{ $errors->first('url', '<span class="help-block">:message</span>') }}
             </div>
+            <div class="form-group">
+                {{ Form::text('description', null, array( 'class' => 'form-control input-lg', 'id' => 'description', 'placeholder' => '(Optional) Enter a short description', )) }}
+            </div> 
+            {{ Form::button('submit', array( 'class' => 'hidden', 'type' => 'submit', )) }}
             {{ Form::close() }}
 
             @if ( Session::has('hash') )
