@@ -37,7 +37,7 @@ class LinkController extends \BaseController {
 
 		$this->linkRepository   = $linkRepository;
 		$this->hitLogRepository = $hitLogRepository;
-		$this->remoteClient	 = $remoteClient;
+		$this->remoteClient     = $remoteClient;
 	}
 
 
@@ -55,7 +55,7 @@ class LinkController extends \BaseController {
 	 */
 	public function index()
 	{
-		$links	= $this->linkRepository->getAllForList();
+		$links    = $this->linkRepository->getAllForList();
 		$popular  = $this->linkRepository->getTopLinks();
 		$creators = $this->linkRepository->getTopCreators();
 
@@ -94,7 +94,7 @@ class LinkController extends \BaseController {
 				'userAgent' => $this->remoteClient->getUserAgent(),
 			]);
 
-			return \Redirect::route('create');
+			\App::abort(403, 'Unauthorised Action');
 		}
 
 		$input = \Input::only('longUrl', 'description');
