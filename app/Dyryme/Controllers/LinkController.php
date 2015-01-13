@@ -88,6 +88,12 @@ class LinkController extends \BaseController {
 		// Try and weed out some of the bots spamming links
 		if ( is_null($this->remoteClient->getUserAgent()) )
 		{
+			\Log::info('Ignored link request from remote client with no user agent', [
+				'ipAddress' => $this->remoteClient->getIpAddress(),
+				'hostname'  => $this->remoteClient->getHostname(),
+				'userAgent' => $this->remoteClient->getUserAgent(),
+			]);
+
 			return \Redirect::route('create');
 		}
 
@@ -102,9 +108,9 @@ class LinkController extends \BaseController {
 				\Event::fire('link.creating', [ [ 'url' => $input['longUrl'], 'hash' => $hash, ] ]);
 
 				$hash = $this->linkRepository->store([
-					'url'		 => $input['longUrl'],
+					'url'         => $input['longUrl'],
 					'description' => $input['description'],
-					'hash'		=> $hash,
+					'hash'        => $hash,
 				])->hash;
 			}
 			catch (ValidationFailedException $e)
@@ -115,7 +121,7 @@ class LinkController extends \BaseController {
 
 		return \Redirect::route('create')->with([
 			'flash_message' => sprintf('Your URL has successfully been shortened to %s', link_to($hash)),
-			'hash'		  => $hash,
+			'hash'          => $hash,
 		]);
 	}
 
