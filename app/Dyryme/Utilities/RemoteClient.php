@@ -32,6 +32,7 @@ class RemoteClient {
 		$this->setIpAddress();
 		$this->setHostname();
 		$this->setUserAgent();
+        $this->setReferer();
 	}
 
 
@@ -88,7 +89,7 @@ class RemoteClient {
 	{
 		$hostname  = gethostbyaddr($this->ipAddress);
 
-		$this->hostname = ( $hostname === false || $hostname == $this->ipAddress ) ? null : $hostname;
+		$this->hostname = ( $hostname !== false && $hostname !== $this->ipAddress ) ? $hostname : null;
 	}
 
 
