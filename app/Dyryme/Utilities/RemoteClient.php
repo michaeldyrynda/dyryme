@@ -105,7 +105,7 @@ class RemoteClient {
 	/**
 	 * Set the referer
 	 */
-	public function setReferrer()
+	public function setReferer()
 	{
 		$this->referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
 	}
