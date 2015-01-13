@@ -3,14 +3,15 @@
 use Dyryme\Repositories\HitLogRepository;
 use Dyryme\Repositories\LinkRepository;
 use Dyryme\Exceptions\ValidationFailedException;
+use Dyryme\Utilities\RemoteClient;
 
 /**
  * Link controller
  *
- * @package    Dyryme
+ * @package	Dyryme
  * @subpackage Controllers
  * @copyright  2015 IATSTUTI
- * @author     Michael Dyrynda <michael@iatstuti.net>
+ * @author	 Michael Dyrynda <michael@iatstuti.net>
  */
 class LinkController extends \BaseController {
 
@@ -28,13 +29,15 @@ class LinkController extends \BaseController {
 	/**
 	 * @param LinkRepository   $linkRepository
 	 * @param HitLogRepository $hitLogRepository
+	 * @param RemoteClient	 $remoteClient
 	 */
-	function __construct(LinkRepository $linkRepository, HitLogRepository $hitLogRepository)
+	function __construct(LinkRepository $linkRepository, HitLogRepository $hitLogRepository, RemoteClient $remoteClient)
 	{
 		parent::__construct();
 
 		$this->linkRepository   = $linkRepository;
 		$this->hitLogRepository = $hitLogRepository;
+		$this->remoteClient	 = $remoteClient;
 	}
 
 
@@ -52,26 +55,26 @@ class LinkController extends \BaseController {
 	 */
 	public function index()
 	{
-		$links    = $this->linkRepository->getAllForList();
+		$links	= $this->linkRepository->getAllForList();
 		$popular  = $this->linkRepository->getTopLinks();
 		$creators = $this->linkRepository->getTopCreators();
 
-        $start = (new \DateTime())->sub(new \DateInterval('P7D'));
-        $end   = new \DateTime();
+		$start = (new \DateTime())->sub(new \DateInterval('P7D'));
+		$end   = new \DateTime();
 
-        $dailyLinkBreakdown = $this->linkRepository->getDailyLinkBreakdown($start, $end);
+		$dailyLinkBreakdown = $this->linkRepository->getDailyLinkBreakdown($start, $end);
 
-        $dailyLinksTable = \Lava::DataTable();
-        $dailyLinksTable->addDateColumn('Date')->addNumberColumn('New Links')->setTimezone('Australia/Adelaide');
+		$dailyLinksTable = \Lava::DataTable();
+		$dailyLinksTable->addDateColumn('Date')->addNumberColumn('New Links')->setTimezone('Australia/Adelaide');
 
-        foreach ($dailyLinkBreakdown as $day)
-        {
-            $dailyLinksTable->addRow([ $day->date, $day->links, ]);
-        }
+		foreach ($dailyLinkBreakdown as $day)
+		{
+			$dailyLinksTable->addRow([ $day->date, $day->links, ]);
+		}
 
-        $dailyLinksChart = \Lava::ColumnChart('DailyLinksChart')->setOptions([
-            'datatable' => $dailyLinksTable,
-        ]);
+		$dailyLinksChart = \Lava::ColumnChart('DailyLinksChart')->setOptions([
+			'datatable' => $dailyLinksTable,
+		]);
 
 		return \View::make('list')->with(compact('links', 'popular', 'creators'));
 	}
@@ -82,7 +85,13 @@ class LinkController extends \BaseController {
 	 */
 	public function store()
 	{
-        $input = \Input::only('longUrl', 'description');
+		// Try and weed out some of the bots spamming links
+		if ( is_null($this->remoteClient->getUserAgent()) )
+		{
+			return \Redirect::route('create');
+		}
+
+		$input = \Input::only('longUrl', 'description');
 
 		list( $hash, $existing ) = $this->linkRepository->makeHash($input['longUrl']);
 
@@ -92,11 +101,11 @@ class LinkController extends \BaseController {
 			{
 				\Event::fire('link.creating', [ [ 'url' => $input['longUrl'], 'hash' => $hash, ] ]);
 
-                $hash = $this->linkRepository->store([
-                    'url'         => $input['longUrl'],
-                    'description' => $input['description'],
-                    'hash'        => $hash,
-                ])->hash;
+				$hash = $this->linkRepository->store([
+					'url'		 => $input['longUrl'],
+					'description' => $input['description'],
+					'hash'		=> $hash,
+				])->hash;
 			}
 			catch (ValidationFailedException $e)
 			{
@@ -106,7 +115,7 @@ class LinkController extends \BaseController {
 
 		return \Redirect::route('create')->with([
 			'flash_message' => sprintf('Your URL has successfully been shortened to %s', link_to($hash)),
-			'hash'          => $hash,
+			'hash'		  => $hash,
 		]);
 	}
 
