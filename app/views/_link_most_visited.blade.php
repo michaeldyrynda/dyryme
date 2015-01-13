@@ -1,7 +1,7 @@
 <tr>
     <td>{{ link_to($link->hash, $link->hash) }}</td>
-    <td>{{ link_to($link->url, $link->url) }}</td>
-    <td>{{ $link->description }}</td>
+    <td><span data-toggle="tooltip" title="{{ $link->url }}">{{ link_to($link->url, str_limit($link->url, 50)) }}</td>
+    <td>@if ( $link->description ){{{ $link->description }}} @else <span class="text-muted">&ndash;</span> @endif</td>
     <td>{{ $link->created_at }}</td>
     <td>
         {{ $link->remoteAddress or '<span class="text-muted">&ndash;</span>' }}<br >
