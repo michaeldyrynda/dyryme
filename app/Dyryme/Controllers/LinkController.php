@@ -198,7 +198,7 @@ class LinkController extends \BaseController {
 			return \Redirect::route('list')->with([ 'flash_message' => 'Could not find specified link', ]);
 		}
 
-		$hits = $link->hits()->paginate(40);
+		$hits = $link->hits()->orderBy('created_at', 'desc')->paginate(40);
 
 		return \View::make('hits')->with(compact('link', 'hits'));
 	}
