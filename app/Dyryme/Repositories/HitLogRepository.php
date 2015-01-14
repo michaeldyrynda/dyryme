@@ -45,4 +45,22 @@ class HitLogRepository {
 		return $link->hits()->save($hit);
 	}
 
+
+	/**
+	 * Get a daily breakdown of link hits between two dates
+	 *
+	 * @param DateTime $start
+	 * @param DateTime $end
+	 *
+	 * @return array|\Illuminate\Database\Eloquent\Collection|static[]
+	 */
+	public function getDailyBreakdown(\DateTime $start, \DateTime $end)
+	{
+		return $this->model->select(\DB::raw('DATE(created_at) as date'), \DB::raw('COUNT(*) as hits'))
+			->groupBy(\DB::raw('DATE(created_at)'))
+			->orderBy('created_at', 'asc')
+			->whereBetween('created_at', [ $start, $end, ])
+			->get();
+	}
+
 }
