@@ -55,25 +55,22 @@ class LinkController extends \BaseController {
 	 */
 	public function index()
 	{
-		$links    = $this->linkRepository->getAllForList();
+		$links	= $this->linkRepository->getAllForList();
 		$popular  = $this->linkRepository->getTopLinks();
 		$creators = $this->linkRepository->getTopCreators();
 
 		$start = (new \DateTime())->sub(new \DateInterval('P7D'));
 		$end   = new \DateTime();
 
-		$dailyLinkBreakdown = $this->linkRepository->getDailyLinkBreakdown($start, $end);
+		$dailyLinksTable = $this->getDailyLinksTable($start, $end);
+		$dailyHitsTable  = $this->getDailyHitsTable($start, $end);
 
-		$dailyLinksTable = \Lava::DataTable();
-		$dailyLinksTable->addDateColumn('Date')->addNumberColumn('New Links')->setTimezone('Australia/Adelaide');
-
-		foreach ($dailyLinkBreakdown as $day)
-		{
-			$dailyLinksTable->addRow([ $day->date, $day->links, ]);
-		}
-
-		$dailyLinksChart = \Lava::ColumnChart('DailyLinksChart')->setOptions([
+		\Lava::ColumnChart('DailyLinksChart')->setOptions([
 			'datatable' => $dailyLinksTable,
+		]);
+
+		\Lava::ColumnChart('DailyHitsChart')->setOptions([
+			'datatable' => $dailyHitsTable,
 		]);
 
 		return \View::make('list')->with(compact('links', 'popular', 'creators'));
@@ -201,6 +198,54 @@ class LinkController extends \BaseController {
 		$hits = $link->hits()->orderBy('created_at', 'desc')->paginate(40);
 
 		return \View::make('hits')->with(compact('link', 'hits'));
+	}
+
+
+	/**
+	 * Get the daily links data table
+	 *
+	 * @param \DateTime $start
+	 * @param \DateTime $end
+	 *
+	 * @return \Lava::DataTable
+	 */
+	private function getDailyLinksTable(\DateTime $start, \DateTime $end)
+	{
+		$dailyLinkBreakdown = $this->linkRepository->getDailyBreakdown($start, $end);
+
+		$dailyLinksTable = \Lava::DataTable();
+		$dailyLinksTable->addDateColumn('Date')->addNumberColumn('New Links')->setTimezone('Australia/Adelaide');
+
+		foreach ($dailyLinkBreakdown as $day)
+		{
+			$dailyLinksTable->addRow([ $day->date, $day->links, ]);
+		}
+
+		return $dailyLinksTable;
+	}
+
+
+	/**
+	 * Get the daily hits data table
+	 *
+	 * @param \DateTime $start
+	 * @param \DateTime $end
+	 *
+	 * @return \Lava::DataTable
+	 */
+	private function getDailyHitsTable(\DateTime $start, \DateTime $end)
+	{
+		$dailyHitBreakdown = $this->hitLogRepository->getDailyBreakdown($start, $end);
+
+		$dailyHitsTable = \Lava::DataTable();
+		$dailyHitsTable->addDateColumn('Date')->addNumberColumn('New Hits')->setTimezone('Australia/Adelaide');
+
+		foreach ($dailyHitBreakdown as $day)
+		{
+			$dailyHitsTable->addRow([ $day->date, $day->hits, ]);
+		}
+
+		return $dailyHitsTable;
 	}
 
 
