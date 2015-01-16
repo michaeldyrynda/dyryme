@@ -55,7 +55,7 @@ class LinkController extends \BaseController {
 	 */
 	public function index()
 	{
-		$links	= $this->linkRepository->getAllForList();
+		$links    = $this->linkRepository->getAllForList();
 		$popular  = $this->linkRepository->getTopLinks();
 		$creators = $this->linkRepository->getTopCreators();
 
