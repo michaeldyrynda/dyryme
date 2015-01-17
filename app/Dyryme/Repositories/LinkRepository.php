@@ -57,7 +57,7 @@ class LinkRepository {
 	{
 		return $this->model
 			->join('hit_log', 'links.id', '=', 'hit_log.link_id')
-			->select('hash', 'url', 'links.created_at', \DB::raw('count(*) as count'))
+			->select('links.id', 'links.hash', 'links.url', 'links.remoteAddress', 'links.hostname', 'links.userAgent', 'links.created_at', \DB::raw('count(*) as count'))
 			->orderByRaw('count(*) desc')
 			->groupBy('hit_log.link_id')
 			->take($count)
@@ -76,6 +76,24 @@ class LinkRepository {
 	{
 		return $this->model->select('remoteAddress',
 			\DB::raw('count(*) as count'))->groupBy('remoteAddress')->orderByRaw('count(*) desc')->take($count)->get();
+	}
+
+
+	/**
+	 * Get a daily breakdown of links created between two dates
+	 *
+	 * @param DateTime $start
+	 * @param DateTime $end
+	 *
+	 * @return array|\Illuminate\Database\Eloquent\Collection|static[]
+	 */
+	public function getDailyBreakdown(\DateTime $start, \DateTime $end)
+	{
+		return $this->model->select(\DB::raw('DATE(created_at) as date'), \DB::raw('COUNT(*) as links'))
+			->groupBy(\DB::raw('DATE(created_at)'))
+			->orderBy('created_at', 'asc')
+			->whereBetween('created_at', [ $start, $end, ])
+			->get();
 	}
 
 

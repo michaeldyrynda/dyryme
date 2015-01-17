@@ -32,6 +32,7 @@ class RemoteClient {
 		$this->setIpAddress();
 		$this->setHostname();
 		$this->setUserAgent();
+        $this->setReferer();
 	}
 
 
@@ -88,7 +89,7 @@ class RemoteClient {
 	{
 		$hostname  = gethostbyaddr($this->ipAddress);
 
-		$this->hostname = ( $hostname === false || $hostname == $this->ipAddress ) ? null : $hostname;
+		$this->hostname = ( $hostname !== false && $hostname !== $this->ipAddress ) ? $hostname : null;
 	}
 
 
@@ -97,14 +98,14 @@ class RemoteClient {
 	 */
 	private function setUserAgent()
 	{
-		$this->userAgent = $_SERVER['HTTP_USER_AGENT'] ?: null;
+		$this->userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null;
 	}
 
 
 	/**
 	 * Set the referer
 	 */
-	public function setReferrer()
+	public function setReferer()
 	{
 		$this->referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
 	}

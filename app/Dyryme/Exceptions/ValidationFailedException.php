@@ -1,4 +1,4 @@
-<?php namespace Dyryme\Validators;
+<?php namespace Dyryme\Exceptions;
 
 /**
  * Generic validation failed exception
