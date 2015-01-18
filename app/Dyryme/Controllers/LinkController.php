@@ -211,17 +211,7 @@ class LinkController extends \BaseController {
 	 */
 	private function getDailyLinksTable(\DateTime $start, \DateTime $end)
 	{
-		$dailyLinkBreakdown = $this->linkRepository->getDailyBreakdown($start, $end);
-
-		$dailyLinksTable = \Lava::DataTable();
-		$dailyLinksTable->addDateColumn('Date')->addNumberColumn('New Links')->setTimezone('Australia/Adelaide');
-
-		foreach ($dailyLinkBreakdown as $day)
-		{
-			$dailyLinksTable->addRow([ $day->date, $day->links, ]);
-		}
-
-		return $dailyLinksTable;
+		return $this->getLinksTable($start, $end, 'links', $this->linkRepository);
 	}
 
 
@@ -235,17 +225,31 @@ class LinkController extends \BaseController {
 	 */
 	private function getDailyHitsTable(\DateTime $start, \DateTime $end)
 	{
-		$dailyHitBreakdown = $this->hitLogRepository->getDailyBreakdown($start, $end);
+		return $this->getLinksTable($start, $end, 'hits', $this->hitLogRepository);
+	}
 
-		$dailyHitsTable = \Lava::DataTable();
-		$dailyHitsTable->addDateColumn('Date')->addNumberColumn('New Hits')->setTimezone('Australia/Adelaide');
 
-		foreach ($dailyHitBreakdown as $day)
+	/**
+	 * @param \DateTime $start
+	 * @param \DateTime $end
+	 * @param           $column
+	 * @param           $repository
+	 *
+	 * @return mixed
+	 */
+	private function getLinksTable(\DateTime $start, \DateTime $end, $column, $repository)
+	{
+		$breakdown = $repository->getDailyBreakdown($start, $end);
+
+		$table = \Lava::DataTable();
+		$table->addDateColumn('Date')->addNumberColumn(\Str::title($column))->setTimezone('Australia/Adelaide');
+
+		foreach ($breakdown as $day)
 		{
-			$dailyHitsTable->addRow([ $day->date, $day->hits, ]);
+			$table->addRow([ $day->date, $day->{$column}, ]);
 		}
 
-		return $dailyHitsTable;
+		return $table;
 	}
 
 
