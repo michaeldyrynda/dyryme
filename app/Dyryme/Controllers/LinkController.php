@@ -205,13 +205,12 @@ class LinkController extends \BaseController {
 	 * Get the daily links data table
 	 *
 	 * @param \DateTime $start
-	 * @param \DateTime $end
 	 *
 	 * @return \Lava::DataTable
 	 */
-	private function getDailyLinksTable(\DateTime $start, \DateTime $end)
+	private function getDailyLinksTable(\DateTime $start)
 	{
-		return $this->getLinksTable($start, $end, 'links', $this->linkRepository);
+		return $this->getLinksTable($start, 'links', $this->linkRepository);
 	}
 
 
@@ -219,27 +218,25 @@ class LinkController extends \BaseController {
 	 * Get the daily hits data table
 	 *
 	 * @param \DateTime $start
-	 * @param \DateTime $end
 	 *
 	 * @return \Lava::DataTable
 	 */
-	private function getDailyHitsTable(\DateTime $start, \DateTime $end)
+	private function getDailyHitsTable(\DateTime $start)
 	{
-		return $this->getLinksTable($start, $end, 'hits', $this->hitLogRepository);
+		return $this->getLinksTable($start, 'hits', $this->hitLogRepository);
 	}
 
 
 	/**
 	 * @param \DateTime $start
-	 * @param \DateTime $end
 	 * @param           $column
 	 * @param           $repository
 	 *
 	 * @return mixed
 	 */
-	private function getLinksTable(\DateTime $start, \DateTime $end, $column, $repository)
+	private function getLinksTable(\DateTime $start, $column, $repository)
 	{
-		$breakdown = $repository->getDailyBreakdown($start, $end);
+		$breakdown = $repository->getDailyBreakdown($start);
 
 		$table = \Lava::DataTable();
 		$table->addDateColumn('Date')->addNumberColumn(\Str::title($column))->setTimezone('Australia/Adelaide');
