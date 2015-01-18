@@ -6,7 +6,8 @@
 	"type": "project",
 	"require": {
 		"laravel/framework": "4.2.*",
-		"khill/lavacharts": "dev-master"
+		"khill/lavacharts": "dev-master",
+		"doctrine/dbal": "~2.5"
 	},
 	"autoload": {
 		"classmap": [
