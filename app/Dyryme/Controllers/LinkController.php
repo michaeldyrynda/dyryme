@@ -59,7 +59,7 @@ class LinkController extends \BaseController {
 		$popular  = $this->linkRepository->getTopLinks();
 		$creators = $this->linkRepository->getTopCreators();
 
-		$start = (new \DateTime())->sub(new \DateInterval('P7D'));
+		$start = (new \DateTime())->sub(new \DateInterval('P6D'));
 		$end   = new \DateTime();
 
 		$dailyLinksTable = $this->getDailyLinksTable($start, $end);
