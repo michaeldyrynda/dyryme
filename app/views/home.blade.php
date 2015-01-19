@@ -15,6 +15,7 @@
 
             <div class="controls">
                 {{ Form::button('Submit', array( 'class' => 'btn btn-default', 'type' => 'Submit', )) }}
+                <a href="{{ route('register') }}" class="btn btn-link" title="Register">Register</a>
             </div>
             {{ Form::close() }}
 

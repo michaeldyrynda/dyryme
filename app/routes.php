@@ -31,5 +31,9 @@ Route::get('login', [ 'as' => 'login', 'uses' => 'Dyryme\Controllers\AuthControl
 Route::post('login', [ 'as' => 'authenticate', 'uses' => 'Dyryme\Controllers\AuthController@authenticate', ]);
 Route::get('logout', [ 'as' => 'logout', 'uses' => 'Dyryme\Controllers\AuthController@logout', ]);
 
+// Registration routes
+Route::get('register', [ 'as' => 'register', 'uses' => 'Dyryme\Controllers\RegistrationController@create', ]);
+Route::post('register', [ 'as' => 'register', 'uses' => 'Dyryme\Controllers\RegistrationController@store', ]);
+
 // Wildcard redirect routes
 Route::get('{hash}', [ 'as' => 'redirect', 'uses' => 'Dyryme\Controllers\LinkController@redirect', ]);
