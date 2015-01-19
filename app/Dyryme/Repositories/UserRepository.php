@@ -56,7 +56,7 @@ class UserRepository {
 	 */
 	public function getUserPermissions($userId)
 	{
-		return $this->model->with('groups', 'group.permissions')->get();
+		return $this->model->with('groups', 'group.permissions')->findOrFail($userId);
 	}
 
 
