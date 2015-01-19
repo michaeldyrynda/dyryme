@@ -25,4 +25,13 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	protected $fillable = [ 'username', 'password', ];
 
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function links()
+	{
+		return $this->hasMany('Dyryme\Models\Link');
+	}
+
 }
