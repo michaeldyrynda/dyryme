@@ -34,6 +34,11 @@ class AclPermittedFilter {
 	 */
 	public function filter($route)
 	{
+		// Superuser has access to all of the things
+		if ( \Auth::user()->superuser ) {
+			return true;
+		}
+
 		$user = $this->userRepository->getPermissions(\Auth::user()->id);
 
 		foreach ($user->groups as $group)
