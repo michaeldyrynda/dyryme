@@ -40,9 +40,15 @@ class LinkRepository {
 	/**
 	 * @return \Illuminate\Pagination\Paginator
 	 */
-	public function getAllForList()
+	public function getAllForList($userId = null)
 	{
-		return $this->model->withTrashed()->with('hits')->orderBy('created_at', 'desc')->paginate(30);
+		$links = $this->model->withTrashed()->with('hits')->orderBy('created_at', 'desc');
+
+		if ( ! is_null($userId) ) {
+			$links->where('user_id', $userId);
+		}
+
+		return $links = $links->paginate(30);
 	}
 
 

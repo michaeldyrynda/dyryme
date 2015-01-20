@@ -38,6 +38,9 @@ class LinkController extends \BaseController {
 		$this->linkRepository   = $linkRepository;
 		$this->hitLogRepository = $hitLogRepository;
 		$this->remoteClient     = $remoteClient;
+
+		$this->beforeFilter('auth');
+		$this->beforeFilter('acl.permitted', [ 'only' => [ 'index', 'destroy', ], ]);
 	}
 
 
@@ -59,7 +62,7 @@ class LinkController extends \BaseController {
 		$popular  = $this->linkRepository->getTopLinks();
 		$creators = $this->linkRepository->getTopCreators();
 
-		$start = (new \DateTime())->sub(new \DateInterval('P7D'));
+		$start = (new \DateTime())->sub(new \DateInterval('P6D'));
 		$end   = new \DateTime();
 
 		$dailyLinksTable = $this->getDailyLinksTable($start, $end);
@@ -156,10 +159,10 @@ class LinkController extends \BaseController {
 	{
 		if ( ! $this->linkRepository->lookupById($id)->delete() )
 		{
-			$flash_message = 'Could not delete link with id ' . htmlspecialchars($id);
+			$flash_message = 'Could not delete link with id ' . e($id);
 		}
 
-		$flash_message = 'Successfully deleted link with id ' . htmlspecialchars($id);
+		$flash_message = 'Successfully deleted link with id ' . e($id);
 
 		return \Redirect::to('list')->with(compact('flash_message'));
 	}
@@ -174,10 +177,10 @@ class LinkController extends \BaseController {
 	{
 		if ( ! $this->linkRepository->lookupById($id)->restore() )
 		{
-			$flash_message = 'Could not restore link with id ' . htmlspecialchars($id);
+			$flash_message = 'Could not restore link with id ' . e($id);
 		}
 
-		$flash_message = 'Successfully restored link with id ' . htmlspecialchars($id);
+		$flash_message = 'Successfully restored link with id ' . e($id);
 
 		return \Redirect::to('list')->with(compact('flash_message'));
 	}
@@ -196,6 +199,11 @@ class LinkController extends \BaseController {
 		}
 
 		$hits = $link->hits()->orderBy('created_at', 'desc')->paginate(40);
+
+		if ( ! \Auth::check() || ( ! \Auth::user()->isSuperUser() && \Auth::id() !== $link->user_id ) )
+		{
+			return \Redirect::route('user.denied');
+		}
 
 		return \View::make('hits')->with(compact('link', 'hits'));
 	}
