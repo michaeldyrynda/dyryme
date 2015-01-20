@@ -1,6 +1,7 @@
 <?php namespace Dyryme\Controllers;
 
 use Dyryme\Exceptions\ValidationFailedException;
+use Dyryme\Repositories\UserRepository;
 
 /**
  * Registration controller
@@ -11,6 +12,21 @@ use Dyryme\Exceptions\ValidationFailedException;
  * @author     Michael Dyrynda <michael@iatstuti.net>
  */
 class RegistrationController extends \BaseController {
+
+	/**
+	 * @var UserRepository
+	 */
+	protected $userRepository;
+
+
+	/**
+	 * @param UserRepository $userRepository
+	 */
+	function __construct(UserRepository $userRepository)
+	{
+		$this->userRepository = $userRepository;
+	}
+
 
 	/**
 	 * @return \Illuminate\View\View
@@ -34,13 +50,15 @@ class RegistrationController extends \BaseController {
 
 			$user = $this->userRepository->store([
 				'username' => $input['email_address'],
-				'password' => Hash::make($input['password']),
+				'password' => \Hash::make($input['password']),
 			]);
 
 			if ( $user && \Auth::login($user) )
 			{
-				return \Redirect::route('user.links');
+				return \Redirect::route('create');
 			}
+
+			return \Redirect::back()->onlyInput('username');
 		}
 		catch (ValidationFailedException $e)
 		{
