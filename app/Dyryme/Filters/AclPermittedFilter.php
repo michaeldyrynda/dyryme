@@ -34,25 +34,10 @@ class AclPermittedFilter {
 	 */
 	public function filter($route)
 	{
-		$permitted = false;
-
 		// Superuser has access to all of the things
-		if ( ! \Auth::user()->superuser )
+		if ( ! \Auth::user()->superuser && ! \Auth::user()->hasPermission($route->getName()) )
 		{
-			$user = $this->userRepository->getUserPermissions(\Auth::user()->id);
-
-			foreach ($user->groups as $group)
-			{
-				if ( $group->permissions->has($route->getName()) && ! $permitted )
-				{
-					$permitted = true;
-				}
-			}
-
-			if ( ! $permitted )
-			{
-				return \Redirect::route('user.denied');
-			}
+			return \Redirect::route('user.denied');
 		}
 	}
 
