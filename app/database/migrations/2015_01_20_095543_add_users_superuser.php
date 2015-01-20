@@ -14,7 +14,7 @@ class AddUsersSuperuser extends Migration {
 	{
 		Schema::table('users', function(Blueprint $table)
 		{
-			$table->binary('superuser')->default(0)->after('remember_token');
+			$table->boolean('superuser')->default(0)->after('remember_token');
 		});
 	}
 
