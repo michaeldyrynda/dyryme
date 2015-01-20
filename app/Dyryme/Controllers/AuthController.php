@@ -45,7 +45,7 @@ class AuthController extends \BaseController {
 
 		if ( \Auth::attempt($input) )
 		{
-			return \Redirect::intended('list');
+			return \Redirect::intended('/');
 		}
 
 		return \Redirect::back()->withInput(\Input::only([ 'username', ]))->with([
