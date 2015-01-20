@@ -17,7 +17,6 @@ class CreateAclPermissionsTable extends Migration {
 			$table->increments('id');
 			$table->string('ident')->unique();
 			$table->string('description');
-			$table->timestamps();
 		});
 	}
 

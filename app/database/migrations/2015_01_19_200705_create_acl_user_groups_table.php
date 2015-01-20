@@ -17,7 +17,6 @@ class CreateAclUserGroupsTable extends Migration {
 			$table->increments('id');
 			$table->integer('user_id')->unsigned();
 			$table->integer('group_id')->unsigned();
-			$table->timestamps();
 		});
 	}
 

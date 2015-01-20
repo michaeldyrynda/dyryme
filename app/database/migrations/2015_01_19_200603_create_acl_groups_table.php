@@ -17,7 +17,6 @@ class CreateAclGroupsTable extends Migration {
 			$table->increments('id');
 			$table->string('name', 50)->unique();
 			$table->string('description');
-			$table->timestamps();
 		});
 	}
 

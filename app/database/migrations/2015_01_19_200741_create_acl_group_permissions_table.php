@@ -17,7 +17,6 @@ class CreateAclGroupPermissionsTable extends Migration {
 			$table->increments('id');
 			$table->integer('group_id')->unsigned();
 			$table->integer('permission_id')->unsigned();
-			$table->timestamps();
 		});
 	}
 
