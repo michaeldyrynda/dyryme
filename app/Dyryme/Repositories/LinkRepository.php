@@ -40,9 +40,15 @@ class LinkRepository {
 	/**
 	 * @return \Illuminate\Pagination\Paginator
 	 */
-	public function getAllForList()
+	public function getAllForList($userId = null)
 	{
-		return $this->model->withTrashed()->with('hits')->orderBy('created_at', 'desc')->paginate(30);
+		$links = $this->model->withTrashed()->with('hits')->orderBy('created_at', 'desc');
+
+		if ( ! is_null($userId) ) {
+			$links->where('user_id', $userId);
+		}
+
+		return $links = $links->paginate(30);
 	}
 
 
@@ -82,19 +88,18 @@ class LinkRepository {
 	/**
 	 * Get a daily breakdown of links created between two dates
 	 *
-     * @param DateTime $start
-     * @param DateTime $end
+	 * @param \DateTime $start
 	 *
 	 * @return array|\Illuminate\Database\Eloquent\Collection|static[]
 	 */
-    public function getDailyLinkBreakdown(\DateTime $start, \DateTime $end)
-    {
-        return $this->model->select(\DB::raw('DATE(created_at) as date'), \DB::raw('COUNT(*) as links'))
-            ->groupBy(\DB::raw('DATE(created_at)'))
-            ->orderBy('created_at', 'asc')
-            ->whereBetween('created_at', [ $start, $end, ])
-            ->get();
-    }
+	public function getDailyBreakdown(\DateTime $start)
+	{
+		return $this->model->select(\DB::raw('DATE(created_at) as date'), \DB::raw('COUNT(*) as links'))
+			->groupBy(\DB::raw('DATE(created_at)'))
+			->orderBy('created_at', 'asc')
+			->where('created_at', '>', $start)
+			->get();
+	}
 
 
 	/**

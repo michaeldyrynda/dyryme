@@ -38,6 +38,9 @@ class LinkController extends \BaseController {
 		$this->linkRepository   = $linkRepository;
 		$this->hitLogRepository = $hitLogRepository;
 		$this->remoteClient     = $remoteClient;
+
+		$this->beforeFilter('auth');
+		$this->beforeFilter('acl.permitted', [ 'only' => [ 'index', 'destroy', ], ]);
 	}
 
 
@@ -59,21 +62,18 @@ class LinkController extends \BaseController {
 		$popular  = $this->linkRepository->getTopLinks();
 		$creators = $this->linkRepository->getTopCreators();
 
-		$start = (new \DateTime())->sub(new \DateInterval('P7D'));
+		$start = (new \DateTime())->sub(new \DateInterval('P6D'));
 		$end   = new \DateTime();
 
-		$dailyLinkBreakdown = $this->linkRepository->getDailyLinkBreakdown($start, $end);
+		$dailyLinksTable = $this->getDailyLinksTable($start, $end);
+		$dailyHitsTable  = $this->getDailyHitsTable($start, $end);
 
-		$dailyLinksTable = \Lava::DataTable();
-		$dailyLinksTable->addDateColumn('Date')->addNumberColumn('New Links')->setTimezone('Australia/Adelaide');
-
-		foreach ($dailyLinkBreakdown as $day)
-		{
-			$dailyLinksTable->addRow([ $day->date, $day->links, ]);
-		}
-
-		$dailyLinksChart = \Lava::ColumnChart('DailyLinksChart')->setOptions([
+		\Lava::ColumnChart('DailyLinksChart')->setOptions([
 			'datatable' => $dailyLinksTable,
+		]);
+
+		\Lava::ColumnChart('DailyHitsChart')->setOptions([
+			'datatable' => $dailyHitsTable,
 		]);
 
 		return \View::make('list')->with(compact('links', 'popular', 'creators'));
@@ -159,10 +159,10 @@ class LinkController extends \BaseController {
 	{
 		if ( ! $this->linkRepository->lookupById($id)->delete() )
 		{
-			$flash_message = 'Could not delete link with id ' . htmlspecialchars($id);
+			$flash_message = 'Could not delete link with id ' . e($id);
 		}
 
-		$flash_message = 'Successfully deleted link with id ' . htmlspecialchars($id);
+		$flash_message = 'Successfully deleted link with id ' . e($id);
 
 		return \Redirect::to('list')->with(compact('flash_message'));
 	}
@@ -177,10 +177,10 @@ class LinkController extends \BaseController {
 	{
 		if ( ! $this->linkRepository->lookupById($id)->restore() )
 		{
-			$flash_message = 'Could not restore link with id ' . htmlspecialchars($id);
+			$flash_message = 'Could not restore link with id ' . e($id);
 		}
 
-		$flash_message = 'Successfully restored link with id ' . htmlspecialchars($id);
+		$flash_message = 'Successfully restored link with id ' . e($id);
 
 		return \Redirect::to('list')->with(compact('flash_message'));
 	}
@@ -198,9 +198,63 @@ class LinkController extends \BaseController {
 			return \Redirect::route('list')->with([ 'flash_message' => 'Could not find specified link', ]);
 		}
 
-		$hits = $link->hits()->paginate(40);
+		$hits = $link->hits()->orderBy('created_at', 'desc')->paginate(40);
+
+		if ( ! \Auth::check() || ( ! \Auth::user()->isSuperUser() && \Auth::id() !== $link->user_id ) )
+		{
+			return \Redirect::route('user.denied');
+		}
 
 		return \View::make('hits')->with(compact('link', 'hits'));
+	}
+
+
+	/**
+	 * Get the daily links data table
+	 *
+	 * @param \DateTime $start
+	 *
+	 * @return \Lava::DataTable
+	 */
+	private function getDailyLinksTable(\DateTime $start)
+	{
+		return $this->getLinksTable($start, 'links', $this->linkRepository);
+	}
+
+
+	/**
+	 * Get the daily hits data table
+	 *
+	 * @param \DateTime $start
+	 *
+	 * @return \Lava::DataTable
+	 */
+	private function getDailyHitsTable(\DateTime $start)
+	{
+		return $this->getLinksTable($start, 'hits', $this->hitLogRepository);
+	}
+
+
+	/**
+	 * @param \DateTime $start
+	 * @param           $column
+	 * @param           $repository
+	 *
+	 * @return mixed
+	 */
+	private function getLinksTable(\DateTime $start, $column, $repository)
+	{
+		$breakdown = $repository->getDailyBreakdown($start);
+
+		$table = \Lava::DataTable();
+		$table->addDateColumn('Date')->addNumberColumn(\Str::title($column))->setTimezone('Australia/Adelaide');
+
+		foreach ($breakdown as $day)
+		{
+			$table->addRow([ $day->date, $day->{$column}, ]);
+		}
+
+		return $table;
 	}
 
 

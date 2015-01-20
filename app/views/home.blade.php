@@ -11,8 +11,11 @@
             </div>
             <div class="form-group">
                 {{ Form::text('description', null, array( 'class' => 'form-control input-lg', 'id' => 'description', 'placeholder' => '(Optional) Enter a short description', )) }}
-            </div> 
-            {{ Form::button('submit', array( 'class' => 'hidden', 'type' => 'submit', )) }}
+            </div>
+
+            <div class="controls">
+                {{ Form::button('Submit', array( 'class' => 'btn btn-default', 'type' => 'Submit', )) }}
+            </div>
             {{ Form::close() }}
 
             @if ( Session::has('hash') )
@@ -20,4 +23,10 @@
             @endif
         </div>
     </div>
+@stop
+
+@section('foot_scripts')
+    <script type="text/javascript">
+        document.getElementById('url').focus();
+    </script>
 @stop

@@ -85,3 +85,5 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+Route::filter('acl.permitted', 'Dyryme\Filters\AclPermittedFilter');

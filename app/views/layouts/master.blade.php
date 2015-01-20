@@ -16,7 +16,7 @@
       <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body @if ( Auth::check() ) style="margin-top: 70px" @endif>
+  <body style="margin-top: 70px">
     @if ( Session::has('flash_message') )
       <div class="alert alert-info alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -24,25 +24,27 @@
       </div>
     @endif
 
-    @if ( Auth::check() )
-      <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            {{ link_to_route('create', 'dyry.me', null, [ 'class' => 'navbar-brand', ]) }}
-          </div>
-
-          <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul class="nav navbar-nav">
-              <li @if ( Route::currentRouteName() == 'list' ) class="active" @endif>{{ link_to_route('list', 'List') }}</li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li><p class="navbar-text">Signed in as {{ Auth::user()->username }}</p></li>
-              <li><a href="{{ route('logout') }}"><span class="glyphicon glyphicon-off"></span></a></li>
-            </ul>
-          </div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          {{ link_to_route('create', 'dyry.me', null, [ 'class' => 'navbar-brand', ]) }}
         </div>
-      </nav>
-    @endif
+
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav">
+            @if ( Auth::check() )
+              @if ( $authUser->hasPermission('link.list') )<li @if ( Route::currentRouteName() == 'list' ) class="active" @endif>{{ link_to_route('list', 'List') }}</li>@endif
+              @if ( $authUser->hasPermission('user.links') )<li @if ( Route::currentRouteName() == 'user.links' ) class="active" @endif>{{ link_to_route('user.links', 'My Links') }}</li>@endif
+            @endif
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>@if ( Auth::check() ) <p class="navbar-text">Signed in as {{ Auth::user()->username }}</p> @else {{ link_to_route('register', 'Register') }}@endif</li>
+            @if ( Auth::guest() )<li>{{ link_to_route('login', 'Login') }}</li>@endif
+            @if ( Auth::check() )<li><a href="{{ route('logout') }}"><span class="glyphicon glyphicon-off"></span></a></li>@endif
+          </ul>
+        </div>
+      </div>
+    </nav>
 
     <div class="container-fluid">
       @yield('content')
