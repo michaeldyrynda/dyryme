@@ -18,6 +18,17 @@ class Link extends Eloquent {
 	protected $fillable = [ 'hash', 'url', 'description', 'remoteAddress', 'hostname', 'userAgent' ];
 
 
+	public static function boot()
+	{
+		parent::boot();
+
+		self::creating(function($model)
+		{
+			$model->user_id = \Auth::check() ? \Auth::id() : null;
+		});
+	}
+
+
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
