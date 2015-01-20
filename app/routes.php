@@ -11,6 +11,10 @@
 |
 */
 
+if ( Auth::check() ) {
+	View::share('authUser', Auth::user());
+}
+
 Route::when('*', 'csrf', [ 'patch', 'post', 'put', ]);
 
 Route::get('/', [ 'as' => 'create', 'uses' => 'Dyryme\Controllers\LinkController@create', ]);
