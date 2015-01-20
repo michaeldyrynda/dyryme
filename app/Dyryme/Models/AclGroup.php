@@ -23,6 +23,6 @@ class AclGroup extends \Eloquent {
 	 */
 	public function permissions()
 	{
-		return $this->belongsToMany('Dyryme\Models\AclPermission', 'acl_group_permissions');
+		return $this->belongsToMany('Dyryme\Models\AclPermission', 'acl_group_permissions', 'group_id', 'permission_id');
 	}
 }
