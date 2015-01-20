@@ -23,7 +23,7 @@ Route::post('store', [ 'as' => 'store', 'uses' => 'Dyryme\Controllers\LinkContro
 // Authenticated link routes
 Route::group([ 'prefix' => 'link', 'before' => 'auth', ], function ()
 {
-	Route::get('list', [ 'as' => 'list', 'before' => [ 'auth', 'acl.permitted', ], 'uses' => 'Dyryme\Controllers\LinkController@index', ]);
+	Route::get('list', [ 'as' => 'list', 'before' => [ 'auth', ], 'uses' => 'Dyryme\Controllers\LinkController@index', ]);
 	Route::delete('{id}', [ 'as' => 'link.destroy', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@destroy', ]);
 	Route::put('{id}', [ 'as' => 'link.activate', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@activate', ]);
 	Route::get('{id}/hits', [ 'as' => 'link.hits', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@hits', ]);
