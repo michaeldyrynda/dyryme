@@ -53,7 +53,7 @@ class RegistrationController extends \BaseController {
 				'password' => \Hash::make($input['password']),
 			]);
 
-			if ( $user && \Auth::attempt([ 'username' => $input['email_address'], 'password' => $input['password'], ]) )
+			if ( $user && \Auth::attempt([ 'username' => $input['email_address'], 'password' => $input['password'], ], true) )
 			{
 				return \Redirect::route('create')->withFlashMessage('Successfully registered an account for username ' . e($input['email_address']));
 			}

@@ -43,7 +43,7 @@ class AuthController extends \BaseController {
 	{
 		$input = \Input::only([ 'username', 'password', ]);
 
-		if ( \Auth::attempt($input) )
+		if ( \Auth::attempt($input, true) )
 		{
 			return \Redirect::intended('/');
 		}
