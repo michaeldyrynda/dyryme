@@ -26,4 +26,5 @@ class AclPermission extends \Eloquent {
 		return $this->attributes['ident'];
 	}
 
+
 }

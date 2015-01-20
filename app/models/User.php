@@ -34,4 +34,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return $this->hasMany('Dyryme\Models\Link');
 	}
 
+
+	public function groups()
+	{
+		return $this->belongsToMany('Dyryme\Models\AclGroup', 'acl_user_groups', 'user_id', 'group_id');
+	}
+
+
 }

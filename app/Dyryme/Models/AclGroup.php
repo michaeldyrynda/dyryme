@@ -1,4 +1,4 @@
-<?php namespace Dyrme\Models;
+<?php namespace Dyryme\Models;
 
 class AclGroup extends \Eloquent {
 
@@ -14,7 +14,7 @@ class AclGroup extends \Eloquent {
 	 */
 	public function users()
 	{
-		return $this->belongsToMany('Dyryme\Models\User', 'acl_user_group');
+		return $this->belongsToMany('Dyryme\Models\User', 'acl_user_groups');
 	}
 
 
@@ -23,6 +23,6 @@ class AclGroup extends \Eloquent {
 	 */
 	public function permissions()
 	{
-		return $this->belongsToMany('Dyryme\Models\AclPermission', 'acl_group_permission');
+		return $this->belongsToMany('Dyryme\Models\AclPermission', 'acl_group_permissions');
 	}
 }
