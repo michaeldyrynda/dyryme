@@ -39,7 +39,7 @@ class LinkController extends \BaseController {
 		$this->hitLogRepository = $hitLogRepository;
 		$this->remoteClient     = $remoteClient;
 
-		$this->beforeFilter('auth');
+		$this->beforeFilter('auth', [ 'only' => [ 'index', 'destroy', ], ]);
 		$this->beforeFilter('acl.permitted', [ 'only' => [ 'index', 'destroy', ], ]);
 	}
 
