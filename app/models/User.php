@@ -35,9 +35,57 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	}
 
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
 	public function groups()
 	{
 		return $this->belongsToMany('Dyryme\Models\AclGroup', 'acl_user_groups', 'user_id', 'group_id');
+	}
+
+
+	/**
+	 * Determine if this user is a superuser
+	 *
+	 * @return mixed
+	 */
+	public function isSuperUser()
+	{
+		return $this->superuser;
+	}
+
+
+	/**
+	 * Get all this user's permissions
+	 *
+	 * @return array
+	 */
+	public function getPermissions()
+	{
+		$permissions = [];
+
+		foreach ($this->load('groups', 'groups.permissions')->groups as $group)
+		{
+			foreach ($group->permissions as $permission)
+			{
+				$permissions[] = $permission->ident;
+			}
+		}
+
+		return $permissions;
+	}
+
+
+	/**
+	 * Determine if this user has the given permission
+	 *
+	 * @param $ident
+	 *
+	 * @return bool
+	 */
+	public function hasPermission($ident)
+	{
+		return $this->isSuperUser() || in_array($ident, $this->getPermissions());
 	}
 
 
