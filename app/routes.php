@@ -39,7 +39,7 @@ Route::get('register', [ 'as' => 'register', 'uses' => 'Dyryme\Controllers\Regis
 Route::post('register', [ 'as' => 'register', 'uses' => 'Dyryme\Controllers\RegistrationController@store', ]);
 
 // User routes
-Route::get('links', [ 'as' => 'user.links', 'uses' => 'Dyryme\Controllers\UserController@index', ]);
+Route::get('links', [ 'as' => 'user.links', 'uses' => 'Dyryme\Controllers\UserController@links', ]);
 Route::get('denied', [ 'as' => 'user.denied', 'uses' => 'Dyryme\Controllers\UserController@denied', ]);
 
 // Wildcard redirect routes
