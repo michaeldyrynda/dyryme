@@ -26,7 +26,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @each('_hit_row', $hits, 'hit', 'raw|<tr><th colspan="6">No hits in the database</th></tr>')
+                        @each('_hit_row', $hits, 'hit', 'raw|<tr><th colspan="6">No information available</th></tr>')
                         </tbody>
                     </table>
                 </div>

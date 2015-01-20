@@ -31,7 +31,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @each('_link_row', $links, 'link', 'raw|<tr><th colspan="7">No links in the database</th></tr>')
+                        @each('_link_row', $links, 'link', 'raw|<tr><th colspan="7">No information available</th></tr>')
                         </tbody>
                     </table>
                 </div>
