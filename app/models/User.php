@@ -26,6 +26,17 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	protected $fillable = [ 'username', 'password', 'superuser', ];
 
 
+	public static function boot()
+	{
+		parent::boot();
+
+		self::created(function ($model)
+		{
+			$model->groups()->sync([ 2, ]);
+		});
+	}
+
+
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
