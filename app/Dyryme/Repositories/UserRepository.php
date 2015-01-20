@@ -38,15 +38,4 @@ class UserRepository {
 	}
 
 
-	/**
-	 * @param $userId
-	 *
-	 * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Support\Collection|static
-	 */
-	public function getUserWithLinks($userId)
-	{
-		return $this->model->with('links')->findOrFail($userId);
-	}
-
-
 }
