@@ -49,15 +49,4 @@ class UserRepository {
 	}
 
 
-	/**
-	 * @param $userId
-	 *
-	 * @return \Illuminate\Database\Eloquent\Collection|static[]
-	 */
-	public function getUserPermissions($userId)
-	{
-		return $this->model->with('groups', 'group.permissions')->findOrFail($userId);
-	}
-
-
 }
