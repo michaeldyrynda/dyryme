@@ -1,5 +1,6 @@
 <?php namespace Dyryme\Controllers;
 
+use Dyryme\Repositories\LinkRepository;
 use Dyryme\Repositories\UserRepository;
 
 /**
@@ -17,13 +18,22 @@ class UserController extends \BaseController {
 	 */
 	protected $userRepository;
 
+	/**
+	 * @var LinkRepository
+	 */
+	private $linkRepository;
+
 
 	/**
 	 * @param UserRepository $userRepository
 	 */
-	function __construct(UserRepository $userRepository)
+	function __construct(UserRepository $userRepository, LinkRepository $linkRepository)
 	{
 		$this->userRepository = $userRepository;
+		$this->linkRepository = $linkRepository;
+
+		$this->beforeFilter('auth');
+		$this->beforeFilter('acl.permitted', [ 'only' => 'links', ]);
 	}
 
 
@@ -37,9 +47,9 @@ class UserController extends \BaseController {
 			return \Redirect::route('login');
 		}
 
-		$user = $this->userRepository->userWithLinks(\Auth::user()->id);
+		$links = $this->linkRepository->getAllForList(\Auth::id());
 
-		return \View::make('user.links')->withUser($user);
+		return \View::make('user.links')->withLinks($links);
 	}
 
 

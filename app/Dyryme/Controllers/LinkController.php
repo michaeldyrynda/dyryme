@@ -38,6 +38,9 @@ class LinkController extends \BaseController {
 		$this->linkRepository   = $linkRepository;
 		$this->hitLogRepository = $hitLogRepository;
 		$this->remoteClient     = $remoteClient;
+
+		$this->beforeFilter('auth');
+		$this->beforeFilter('acl.filtered');
 	}
 
 
