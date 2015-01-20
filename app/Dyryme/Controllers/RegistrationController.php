@@ -53,16 +53,16 @@ class RegistrationController extends \BaseController {
 				'password' => \Hash::make($input['password']),
 			]);
 
-			if ( $user && \Auth::login($user) )
+			if ( $user && \Auth::attempt([ 'username' => $input['email_address'], 'password' => $input['password'], ]) )
 			{
-				return \Redirect::route('create');
+				return \Redirect::route('create')->withFlashMessage('Successfully registered an account for username ' . e($input['email_address']));
 			}
 
-			return \Redirect::back()->onlyInput('username');
+			return \Redirect::back()->onlyInput('email_address');
 		}
 		catch (ValidationFailedException $e)
 		{
-			return \Redirect::back()->withErrors($e->getErrors())->onlyInput('username');
+			return \Redirect::back()->withErrors($e->getErrors())->onlyInput('email_address');
 		}
 	}
 
