@@ -56,6 +56,15 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 
 	/**
+	 * @param $password
+	 */
+	public function setPasswordAttribute($password)
+	{
+		$this->attributes['password'] = Hash::make($password);
+	}
+
+
+	/**
 	 * Determine if this user is a superuser
 	 *
 	 * @return mixed

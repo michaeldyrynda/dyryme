@@ -50,7 +50,7 @@ class RegistrationController extends \BaseController {
 
 			$user = $this->userRepository->store([
 				'username' => $input['email_address'],
-				'password' => \Hash::make($input['password']),
+				'password' => $input['password'],
 			]);
 
 			if ( $user && \Auth::attempt([ 'username' => $input['email_address'], 'password' => $input['password'], ], true) )
