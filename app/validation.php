@@ -2,5 +2,5 @@
 
 Validator::extend('no_recursion', function ($attribute, $value, $parameters)
 {
-	return ! stristr($value, 'dyry.me');
+	return ! starts_with($value, 'http://dyry.me')  && ! starts_with($value, 'https://dyry.me');
 });
