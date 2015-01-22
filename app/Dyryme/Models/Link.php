@@ -67,4 +67,16 @@ class Link extends Eloquent {
     }
 
 
+	/**
+	 * @param $url
+	 */
+	public function setUrlAttribute($url)
+	{
+		if ( ! starts_with('http://', $url) && ! starts_with('https://', $url) )
+		{
+			$this->attributes['url'] = sprintf('http://%s', $url);
+		}
+	}
+
+
 }

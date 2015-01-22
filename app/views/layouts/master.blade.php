@@ -17,16 +17,20 @@
     <![endif]-->
   </head>
   <body style="margin-top: 70px">
-    @if ( Session::has('flash_message') )
-      <div class="alert alert-info alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{ Session::get('flash_message') }}
-      </div>
-    @endif
-
-    @include('_navigation')
-
     <div class="container-fluid">
+      @if ( Session::has('flash_message') )
+        <div class="row">
+          <div class="col-md-12">
+            <div class="alert alert-info alert-dismissable">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              {{ Session::get('flash_message') }}
+            </div>
+          </div>
+        </div>
+      @endif
+
+      @include('_navigation')
+
       @yield('content')
     </div>
 
