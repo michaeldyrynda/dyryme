@@ -1,5 +1,6 @@
 <?php namespace Dyryme\Repositories;
 
+use Carbon\Carbon;
 use Dyryme\Models\HitLog;
 use Dyryme\Models\Link;
 use Dyryme\Utilities\RemoteClient;
@@ -61,5 +62,26 @@ class HitLogRepository {
 			->where('created_at', '>', $start)
 			->get();
 	}
+
+
+	/**
+	 * Return a count of how many hits a link has received within the last minute from a given remote address
+	 *
+	 * @param $linkId
+	 *
+	 * @return mixed
+	 */
+	public function countByAddress($linkId)
+	{
+		$start = Carbon::now()->subMinutes(1);
+
+		return $this->model->select([ \DB::raw('COUNT(*) as count'), ])
+			->where('link_id', $linkId)
+			->where('created_at', '>', $start)
+			->where('remoteAddress', ip2long($this->remoteClient->getIpAddress()))
+			->first()
+			->count;
+	}
+
 
 }

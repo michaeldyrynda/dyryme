@@ -1,5 +1,8 @@
 <?php namespace Dyryme\Controllers;
 
+use Dyryme\Exceptions\LooperException;
+use Dyryme\Exceptions\PermissionDeniedException;
+use Dyryme\Models\Link;
 use Dyryme\Repositories\HitLogRepository;
 use Dyryme\Repositories\LinkRepository;
 use Dyryme\Exceptions\ValidationFailedException;
@@ -40,7 +43,7 @@ class LinkController extends \BaseController {
 		$this->remoteClient     = $remoteClient;
 
 		$this->beforeFilter('auth', [ 'only' => [ 'index', 'destroy', ], ]);
-		$this->beforeFilter('acl.permitted', [ 'only' => [ 'index', 'destroy', ], ]);
+		$this->beforeFilter('acl.permitted', [ 'only' => [ 'index', ], ]);
 	}
 
 
@@ -137,12 +140,15 @@ class LinkController extends \BaseController {
 	{
 		$link = $this->linkRepository->lookupByHash($hash);
 
+
 		if ( ! $link )
 		{
 			return \Redirect::route('create')->with([
 				'flash_message' => 'The specified short url could not be found',
 			]);
 		}
+
+		$this->protectAgainstLooping($link);
 
 		$this->hitLogRepository->store($link);
 
@@ -157,14 +163,18 @@ class LinkController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		if ( ! $this->linkRepository->lookupById($id)->delete() )
+		$link = $this->linkRepository->lookupById($id);
+
+		$this->authPermissionCheck($link->user_id);
+
+		if ( ! $link->delete() )
 		{
 			$flash_message = 'Could not delete link with id ' . e($id);
 		}
 
 		$flash_message = 'Successfully deleted link with id ' . e($id);
 
-		return \Redirect::to('list')->with(compact('flash_message'));
+		return \Redirect::back()->with(compact('flash_message'));
 	}
 
 
@@ -175,14 +185,18 @@ class LinkController extends \BaseController {
 	 */
 	public function activate($id)
 	{
-		if ( ! $this->linkRepository->lookupById($id)->restore() )
+		$link = $this->linkRepository->lookupById($id);
+
+		$this->authPermissionCheck($link->user_id);
+
+		if ( ! $link->restore() )
 		{
 			$flash_message = 'Could not restore link with id ' . e($id);
 		}
 
 		$flash_message = 'Successfully restored link with id ' . e($id);
 
-		return \Redirect::to('list')->with(compact('flash_message'));
+		return \Redirect::back()->with(compact('flash_message'));
 	}
 
 
@@ -195,15 +209,12 @@ class LinkController extends \BaseController {
 	{
 		if ( ! ( $link = $this->linkRepository->lookupById($linkId) ) )
 		{
-			return \Redirect::route('list')->with([ 'flash_message' => 'Could not find specified link', ]);
+			return \Redirect::back()->with([ 'flash_message' => 'Could not find specified link', ]);
 		}
+
+		$this->authPermissionCheck($link->user_id);
 
 		$hits = $link->hits()->orderBy('created_at', 'desc')->paginate(40);
-
-		if ( ! \Auth::check() || ( ! \Auth::user()->isSuperUser() && \Auth::id() !== $link->user_id ) )
-		{
-			return \Redirect::route('user.denied');
-		}
 
 		return \View::make('hits')->with(compact('link', 'hits'));
 	}
@@ -255,6 +266,47 @@ class LinkController extends \BaseController {
 		}
 
 		return $table;
+	}
+
+
+	/**
+	 * @return \Illuminate\View\View
+	 */
+	public function looper()
+	{
+		return \View::make('loop_detected');
+	}
+
+
+	/**
+	 * @param $userId
+	 *
+	 * @throws PermissionDeniedException
+	 */
+	private function authPermissionCheck($userId)
+	{
+		if ( ! \Auth::check() || ( ! \Auth::user()->isSuperUser() && \Auth::id() !== $userId ) )
+		{
+			throw new PermissionDeniedException;
+		}
+	}
+
+
+	/**
+	 * @param Link $link
+	 *
+	 * @throws LooperException
+	 */
+	private function protectAgainstLooping(Link $link)
+	{
+		$hits = $this->hitLogRepository->countByAddress($link->id);
+
+		if ( $hits > 3 ) {
+			// Make it gone for good so that the user can't just re-enable it
+			$link->forceDelete();
+
+			throw new LooperException;
+		}
 	}
 
 
