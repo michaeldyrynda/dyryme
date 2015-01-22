@@ -91,6 +91,7 @@ return array(
 	),
 
 	'no_recursion' => 'Nice try',
+	'no_hitler' => 'Nein, mein Fuhrer!',
 
 	/*
 	|--------------------------------------------------------------------------
