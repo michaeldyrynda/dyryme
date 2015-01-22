@@ -20,7 +20,7 @@ Route::when('*', 'csrf', [ 'patch', 'post', 'put', ]);
 Route::get('/', [ 'as' => 'create', 'uses' => 'Dyryme\Controllers\LinkController@create', ]);
 Route::post('store', [ 'as' => 'store', 'uses' => 'Dyryme\Controllers\LinkController@store', ]);
 
-Route::get('loop_detected', [ 'as' => 'loop_detected', 'uses' => 'Dyryme\Controllers\LinkController@looper', ]);
+Route::get('looper', [ 'as' => 'loop_detected', 'uses' => 'Dyryme\Controllers\LinkController@looper', ]);
 
 // Authenticated link routes
 Route::group([ 'prefix' => 'link', 'before' => 'auth', ], function ()
