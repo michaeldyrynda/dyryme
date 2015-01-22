@@ -28,6 +28,7 @@
                                 Hostname
                             </th>
                             <th>User Agent</th>
+                            <th>Options</th>
                         </tr>
                         </thead>
                         <tbody>
