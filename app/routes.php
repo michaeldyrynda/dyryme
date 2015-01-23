@@ -15,6 +15,12 @@ if ( Auth::check() ) {
 	View::share('authUser', Auth::user());
 }
 
+// Queues
+Route::post('queue/receive', function()
+{
+	return Queue::marshal();
+});
+
 Route::when('*', 'csrf', [ 'patch', 'post', 'put', ]);
 
 Route::get('/', [ 'as' => 'create', 'uses' => 'Dyryme\Controllers\LinkController@create', ]);
@@ -43,12 +49,6 @@ Route::post('register', [ 'as' => 'register', 'uses' => 'Dyryme\Controllers\Regi
 // User routes
 Route::get('links', [ 'as' => 'user.links', 'uses' => 'Dyryme\Controllers\UserController@links', ]);
 Route::get('denied', [ 'as' => 'user.denied', 'uses' => 'Dyryme\Controllers\UserController@denied', ]);
-
-// Queues
-Route::post('queue/receive', function()
-{
-    return Queue::marshal();
-});
 
 // Wildcard redirect routes
 Route::get('{hash}', [ 'as' => 'redirect', 'uses' => 'Dyryme\Controllers\LinkController@redirect', ]);
