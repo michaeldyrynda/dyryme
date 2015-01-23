@@ -21,8 +21,6 @@ Route::post('queue/receive', function()
 	return Queue::marshal();
 });
 
-Route::when('*', 'csrf', [ 'patch', 'post', 'put', ]);
-
 Route::get('/', [ 'as' => 'create', 'uses' => 'Dyryme\Controllers\LinkController@create', ]);
 Route::post('store', [ 'as' => 'store', 'before' => 'csrf', 'uses' => 'Dyryme\Controllers\LinkController@store', ]);
 
