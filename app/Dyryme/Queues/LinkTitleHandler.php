@@ -2,7 +2,6 @@
 
 use Dyryme\Repositories\LinkRepository;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ConnectException;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -20,13 +19,20 @@ class LinkTitleHandler {
 	 */
 	private $linkRepository;
 
+	/**
+	 * @var Client
+	 */
+	private $client;
+
 
 	/**
 	 * @param LinkRepository $linkRepository
+	 * @param Client         $client
 	 */
-	public function __construct(LinkRepository $linkRepository)
+	public function __construct(LinkRepository $linkRepository, Client $client)
 	{
 		$this->linkRepository = $linkRepository;
+		$this->client         = $client;
 	}
 
 
@@ -74,8 +80,7 @@ class LinkTitleHandler {
 	 */
 	private function getUrlBody($url)
 	{
-		$client   = new Client;
-		$response = $client->get($url);
+		$response = $this->client->get($url);
 
 		return $response->getBody()->getContents();
 	}
