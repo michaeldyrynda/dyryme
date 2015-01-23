@@ -1,6 +1,7 @@
 <?php namespace Dyryme\Validators;
 
-use Illuminate\Validation\Validator;
+use Dyryme\Exceptions\ValidationFailedException;
+use Illuminate\Validation\Factory;
 
 /**
  * Base validation class
@@ -15,24 +16,23 @@ abstract class AbstractValidator {
 	protected $validator;
 
 
-	/**
-	 * @param Validator $validator
-	 */
-	function __construct(Validator $validator)
+	function __construct(Factory $validator)
 	{
 		$this->validator = $validator;
 	}
 
 
 	/**
+	 * @param $input
+	 *
 	 * @return bool
 	 * @throws ValidationFailedException
 	 */
 	public function fire($input)
 	{
-		$validator = \Validator::make($input, static::rules);
+		$validator = $this->validator->make($input, static::$rules);
 
-		if ( $validator->fails )
+		if ( $validator->fails() )
 		{
 			throw new ValidationFailedException($validator->messages());
 		}

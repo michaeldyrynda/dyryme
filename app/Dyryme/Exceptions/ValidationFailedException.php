@@ -1,4 +1,4 @@
-<?php namespace Dyryme\Validators;
+<?php namespace Dyryme\Exceptions;
 
 /**
  * Generic validation failed exception
@@ -11,13 +11,13 @@
 
 class ValidationFailedException extends \Exception {
 
-	protected $errors = [ ];
+	protected $errors;
 
 
 	/**
-	 * @param array $errors
+	 * @param $errors
 	 */
-	function __construct(array $errors)
+	function __construct($errors)
 	{
 		$this->errors = $errors;
 	}

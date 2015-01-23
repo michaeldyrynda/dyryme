@@ -16,12 +16,29 @@
       <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
-    @yield('content')
+  <body style="margin-top: 70px">
+    <div class="container-fluid">
+      @if ( Session::has('flash_message') )
+        <div class="row">
+          <div class="col-md-12">
+            <div class="alert alert-info alert-dismissable">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              {{ Session::get('flash_message') }}
+            </div>
+          </div>
+        </div>
+      @endif
+
+      @include('_navigation')
+
+      @yield('content')
+    </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="//cdn.jsdelivr.net/bootstrap/3.3.1/js/bootstrap.min.jr"></script>
+    <script src="//cdn.jsdelivr.net/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+    @yield('foot_scripts')
   </body>
 </html>

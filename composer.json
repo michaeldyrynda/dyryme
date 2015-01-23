@@ -5,7 +5,10 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"laravel/framework": "4.2.*"
+		"laravel/framework": "4.2.*",
+		"khill/lavacharts": "dev-master",
+		"doctrine/dbal": "~2.5",
+		"guzzlehttp/guzzle": "~5.0"
 	},
 	"autoload": {
 		"classmap": [
@@ -40,6 +43,7 @@
 	"minimum-stability": "stable",
 	"require-dev": {
 		"barryvdh/laravel-ide-helper": "~1.11",
-		"way/generators": "~3.0"
+		"way/generators": "~3.0",
+		"itsgoingd/clockwork": "1.*"
 	}
 }
