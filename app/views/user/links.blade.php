@@ -12,8 +12,7 @@
                     <table class="table table-striped table-condensed">
                         <col style="width: 5%;"/>
                         <col style="width: 15%;"/>
-                        <col style="width: 15%;"/>
-                        <col style="width: 15%;"/>
+                        <col style="width: 30%;"/>
                         <col style="width: 10%;"/>
                         <col style="width: 10%;"/>
                         <col style="width: 25%;"/>
@@ -23,7 +22,6 @@
                             <th>Hash</th>
                             <th>URL</th>
                             <th>Page Title</th>
-                            <th>Description</th>
                             <th>Created</th>
                             <th>
                                 IP Address<br/>
