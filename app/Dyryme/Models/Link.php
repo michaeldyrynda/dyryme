@@ -15,7 +15,7 @@ class Link extends Eloquent {
 
 	use SoftDeletingTrait;
 
-	protected $fillable = [ 'hash', 'url', 'description', 'remoteAddress', 'hostname', 'userAgent' ];
+	protected $fillable = [ 'hash', 'url', 'page_title', 'description', 'remoteAddress', 'hostname', 'userAgent' ];
 
 
 	public static function boot()
@@ -72,9 +72,13 @@ class Link extends Eloquent {
 	 */
 	public function setUrlAttribute($url)
 	{
-		if ( ! starts_with('http://', $url) && ! starts_with('https://', $url) )
+		if ( ! starts_with($url, 'http://') && ! starts_with($url, 'https://') )
 		{
 			$this->attributes['url'] = sprintf('http://%s', $url);
+		}
+		else
+		{
+			$this->attributes['url'] = $url;
 		}
 	}
 

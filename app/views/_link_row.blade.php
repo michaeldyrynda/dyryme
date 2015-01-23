@@ -1,6 +1,7 @@
 <tr @if ( $link->trashed() )class="danger"@endif>
     <td>{{ link_to($link->hash, $link->hash) }} ({{ link_to_route('link.hits', $link->hits->count(), [ $link->id, ]) }})</td>
     <td><span data-toggle="tooltip" title="{{ $link->url }}">{{ link_to($link->url, str_limit($link->url, 50)) }}</td>
+    <td><span data-toggle="tooltip" title="{{ $link->page_title }}">{{ str_limit($link->page_title, 50) }}</span></td>
     <td>@if ( $link->description ){{{ $link->description }}} @else <span class="text-muted">&ndash;</span> @endif</td>
     <td>{{ $link->created_at }}</td>
     <td>

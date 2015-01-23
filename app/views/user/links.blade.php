@@ -12,15 +12,17 @@
                     <table class="table table-striped table-condensed">
                         <col style="width: 5%;"/>
                         <col style="width: 15%;"/>
-                        <col style="width: 20%;"/>
+                        <col style="width: 15%;"/>
+                        <col style="width: 15%;"/>
                         <col style="width: 10%;"/>
                         <col style="width: 10%;"/>
-                        <col style="width: 35%;"/>
+                        <col style="width: 25%;"/>
                         <col style="width: 5%;"/>
                         <thead>
                         <tr>
                             <th>Hash</th>
                             <th>URL</th>
+                            <th>Page Title</th>
                             <th>Description</th>
                             <th>Created</th>
                             <th>
@@ -32,7 +34,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @each('_link_row', $links, 'link', 'raw|<tr><th colspan="7">No information available</th></tr>')
+                        @each('_link_row', $links, 'link', 'raw|<tr><th colspan="8">No information available</th></tr>')
                         </tbody>
                     </table>
                 </div>
@@ -42,4 +44,12 @@
             {{ $links->links() }}
         </div>
     </div>
+@stop
+
+@section('foot_scripts')
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 @stop

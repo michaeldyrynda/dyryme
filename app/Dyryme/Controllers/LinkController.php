@@ -110,11 +110,15 @@ class LinkController extends \BaseController {
 			{
 				\Event::fire('link.creating', [ [ 'url' => $input['longUrl'], 'hash' => $hash, ] ]);
 
-				$hash = $this->linkRepository->store([
+				$link = $this->linkRepository->store([
 					'url'         => $input['longUrl'],
 					'description' => $input['description'],
 					'hash'        => $hash,
-				])->hash;
+				]);
+
+				\Queue::push('Dyryme\Queues\LinkTitleHandler', [ 'id' => $link->id, 'url' => $link->url, ]);
+
+				$hash = $link->hash;
 			}
 			catch (ValidationFailedException $e)
 			{
