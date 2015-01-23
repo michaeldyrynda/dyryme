@@ -8,7 +8,7 @@ return array(
 			'host'    => getenv('IRON_HOST'),
 			'token'   => getenv('IRON_TOKEN'),
 			'project' => getenv('IRON_PROJECT'),
-			'queue'   => getenv('IRON_ENCRYPT'),
+			'queue'   => getenv('IRON_QUEUE'),
 			'encrypt' => true,
 		),
 	),
