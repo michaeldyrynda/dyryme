@@ -24,27 +24,27 @@ Route::post('queue/receive', function()
 Route::when('*', 'csrf', [ 'patch', 'post', 'put', ]);
 
 Route::get('/', [ 'as' => 'create', 'uses' => 'Dyryme\Controllers\LinkController@create', ]);
-Route::post('store', [ 'as' => 'store', 'uses' => 'Dyryme\Controllers\LinkController@store', ]);
+Route::post('store', [ 'as' => 'store', 'before' => 'csrf', 'uses' => 'Dyryme\Controllers\LinkController@store', ]);
 
 Route::get('looper', [ 'as' => 'loop_detected', 'uses' => 'Dyryme\Controllers\LinkController@looper', ]);
 
 // Authenticated link routes
 Route::group([ 'prefix' => 'link', 'before' => 'auth', ], function ()
 {
-	Route::get('list', [ 'as' => 'list', 'before' => [ 'auth', ], 'uses' => 'Dyryme\Controllers\LinkController@index', ]);
-	Route::delete('{id}', [ 'as' => 'link.destroy', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@destroy', ]);
-	Route::put('{id}', [ 'as' => 'link.activate', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@activate', ]);
-	Route::get('{id}/hits', [ 'as' => 'link.hits', 'before' => 'auth', 'uses' => 'Dyryme\Controllers\LinkController@hits', ]);
+	Route::get('list', [ 'as' => 'list', 'uses' => 'Dyryme\Controllers\LinkController@index', ]);
+	Route::delete('{id}', [ 'as' => 'link.destroy', 'before' => 'auth|csrf', 'uses' => 'Dyryme\Controllers\LinkController@destroy', ]);
+	Route::put('{id}', [ 'as' => 'link.activate', 'before' => 'auth|csrf', 'uses' => 'Dyryme\Controllers\LinkController@activate', ]);
+	Route::get('{id}/hits', [ 'as' => 'link.hits', 'uses' => 'Dyryme\Controllers\LinkController@hits', ]);
 });
 
 // Authentication routes
 Route::get('login', [ 'as' => 'login', 'uses' => 'Dyryme\Controllers\AuthController@login', ]);
-Route::post('login', [ 'as' => 'authenticate', 'uses' => 'Dyryme\Controllers\AuthController@authenticate', ]);
+Route::post('login', [ 'as' => 'authenticate', 'before' => 'csrf', 'uses' => 'Dyryme\Controllers\AuthController@authenticate', ]);
 Route::get('logout', [ 'as' => 'logout', 'uses' => 'Dyryme\Controllers\AuthController@logout', ]);
 
 // Registration routes
 Route::get('register', [ 'as' => 'register', 'uses' => 'Dyryme\Controllers\RegistrationController@create', ]);
-Route::post('register', [ 'as' => 'register', 'uses' => 'Dyryme\Controllers\RegistrationController@store', ]);
+Route::post('register', [ 'as' => 'register', 'before' => 'csrf', 'uses' => 'Dyryme\Controllers\RegistrationController@store', ]);
 
 // User routes
 Route::get('links', [ 'as' => 'user.links', 'uses' => 'Dyryme\Controllers\UserController@links', ]);
