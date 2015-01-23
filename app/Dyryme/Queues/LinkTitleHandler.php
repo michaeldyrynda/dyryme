@@ -38,24 +38,27 @@ class LinkTitleHandler {
 	 */
 	public function fire($job, $data)
 	{
-		try
+		$link = $this->linkRepository->lookupById($data['id']);
+
+		if ( $job->attempts() > 3 )
 		{
-			$body = $this->getUrlBody($data['url']);
+			// Three failed attempts is enough, forget about this link...
+			$job->delete();
 
-			$title = $this->getTitle($body);
+			// ...it's probably dead
+			$link->forceDelete();
 
-			$link = $this->linkRepository->lookupById($data['id']);
-
-			if ( $link->fill([ 'page_title' => $title, ])->save() )
-			{
-				$job->delete();
-
-				return true;
-			}
+			return true;
 		}
-		catch (ConnectException $e)
+
+		$body  = $this->getUrlBody($data['url']);
+		$title = $this->getTitle($body);
+
+		if ( $link->fill([ 'page_title' => $title, ])->save() )
 		{
-			// no action
+			$job->delete();
+
+			return true;
 		}
 
 		$job->release();
