@@ -8,7 +8,8 @@
 		"laravel/framework": "4.2.*",
 		"khill/lavacharts": "dev-master",
 		"doctrine/dbal": "~2.5",
-		"guzzlehttp/guzzle": "~5.0"
+		"guzzlehttp/guzzle": "~5.0",
+		"iron-io/iron_mq": "~1.5"
 	},
 	"autoload": {
 		"classmap": [
