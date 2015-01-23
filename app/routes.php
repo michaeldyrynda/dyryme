@@ -44,5 +44,11 @@ Route::post('register', [ 'as' => 'register', 'uses' => 'Dyryme\Controllers\Regi
 Route::get('links', [ 'as' => 'user.links', 'uses' => 'Dyryme\Controllers\UserController@links', ]);
 Route::get('denied', [ 'as' => 'user.denied', 'uses' => 'Dyryme\Controllers\UserController@denied', ]);
 
+// Queues
+Route::post('queue/receive', function()
+{
+    return Queue::marshal();
+});
+
 // Wildcard redirect routes
 Route::get('{hash}', [ 'as' => 'redirect', 'uses' => 'Dyryme\Controllers\LinkController@redirect', ]);
