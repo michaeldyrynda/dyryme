@@ -337,6 +337,8 @@ class LinkController extends \BaseController {
 
 		if ( $hits > 3 )
 		{
+			\Event::fire('link.forceDeleting', [ $link, ]);
+
 			// Make it gone for good so that the user can't just re-enable it
 			$link->forceDelete();
 

@@ -54,6 +54,8 @@ class LinkTitleHandler {
 			// Three failed attempts is enough, forget about this link...
 			$job->delete();
 
+			\Event::fire('link.forceDeleting', [ $link, ]);
+
 			// ...it's probably dead
 			$link->forceDelete();
 
