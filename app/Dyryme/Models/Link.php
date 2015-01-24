@@ -15,14 +15,14 @@ class Link extends Eloquent {
 
 	use SoftDeletingTrait;
 
-	protected $fillable = [ 'hash', 'url', 'page_title', 'description', 'remoteAddress', 'hostname', 'userAgent' ];
+	protected $fillable = [ 'hash', 'url', 'page_title', 'remoteAddress', 'hostname', 'userAgent' ];
 
 
 	public static function boot()
 	{
 		parent::boot();
 
-		self::creating(function($model)
+		self::creating(function ($model)
 		{
 			$model->user_id = \Auth::check() ? \Auth::id() : null;
 		});
@@ -56,15 +56,6 @@ class Link extends Eloquent {
 	{
 		$this->attributes['remoteAddress'] = ip2long($value) ?: null;
 	}
-
-
-    /**
-     * @param $value
-     */
-    public function setDescriptionAttribute($value)
-    {
-        $this->attributes['description'] = trim($value) !== '' ? trim($value) : null;
-    }
 
 
 	/**
