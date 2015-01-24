@@ -23,6 +23,7 @@ Route::post('queue/receive', function()
 
 Route::get('/', [ 'as' => 'create', 'uses' => 'Dyryme\Controllers\LinkController@create', ]);
 Route::post('store', [ 'as' => 'store', 'before' => 'csrf', 'uses' => 'Dyryme\Controllers\LinkController@store', ]);
+Route::get('screenshot/{id}', [ 'as' => 'screenshot', 'uses' => 'Dyryme\Controllers\LinkController@screenshot', ]);
 
 Route::get('looper', [ 'as' => 'loop_detected', 'uses' => 'Dyryme\Controllers\LinkController@looper', ]);
 
