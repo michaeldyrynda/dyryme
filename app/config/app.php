@@ -123,6 +123,8 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
         'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
+		'Wnx\ScreeenlyClient\ScreeenlyClientServiceProvicer',
+
 	),
 
 	/*
