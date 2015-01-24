@@ -5,12 +5,15 @@
         <div class="col-md-4 col-md-offset-4">
             <h2 class="text-center">dyry.me link shortener</h2>
             {{ Form::open(array( 'route' => 'store', 'method' => 'post', )) }}
-            <div class="form-group @if ( $errors->has('url') ) has-error @endif">
-                {{ Form::text('longUrl', null, array( 'class' => 'form-control input-lg', 'id' => 'url', 'placeholder' => 'Enter URL to shorten', 'required' => 'required', )) }}
-                {{ $errors->first('url', '<span class="help-block">:message</span>') }}
-            </div>
-            <div class="form-group">
-                {{ Form::text('description', null, array( 'class' => 'form-control input-lg', 'id' => 'description', 'placeholder' => '(Optional) Enter a short description', )) }}
+            @if ( ! $errors->isEmpty() )
+                @include('_alert', [ 'alert_type' => 'danger', 'alert_messages' => $errors, ])
+            @endif
+            <div class="form-group @if ( $errors->has('url') )has-error has-feedback @endif">
+                {{ Form::text('longUrl', null, array( 'class' => 'form-control input-lg', 'id' => 'url', 'placeholder' => 'Enter URL to shorten', 'required' => 'required', 'aria-describedby' => 'urlErrorStatus', )) }}
+                @if ( $errors->has('url') )
+                    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                    <span id="urlErrorStatus" class="sr-only">(error)</span>
+                @endif
             </div>
 
             <div class="controls">
