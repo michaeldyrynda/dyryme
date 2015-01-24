@@ -1,6 +1,7 @@
 <?php namespace Dyryme\Queues;
 
 use Dyryme\Repositories\LinkRepository;
+use GuzzleHttp\Exception\ServerException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Queue\Jobs\Job;
 use Intervention\Image\Facades\Image;
@@ -69,6 +70,12 @@ class ScreenshotHandler {
 			$job->delete();
 
 			return true;
+		}
+		catch (ServerException $e)
+		{
+			$job->release();
+
+			return false;
 		}
 	}
 
