@@ -103,6 +103,11 @@ class LinkController extends \BaseController {
 
 		$input = \Input::only('longUrl');
 
+		if ( ! starts_with($input['longUrl'], [ 'http://', 'https://', ]) )
+		{
+			$input['longUrl'] = sprintf('http://%s', $input['longUrl']);
+		}
+
 		list( $hash, $existing ) = $this->linkRepository->makeHash($input['longUrl']);
 
 		if ( ! $existing )
