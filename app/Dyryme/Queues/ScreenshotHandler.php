@@ -38,6 +38,14 @@ class ScreenshotHandler {
 	 */
 	public function fire(Job $job, $data)
 	{
+		if ( $job->attempts() > 3 )
+		{
+			// Don't worry about it, then
+			$job->delete();
+
+			return true;
+		}
+
 		try
 		{
 			$link = $this->linkRepository->lookupById($data['id']);
