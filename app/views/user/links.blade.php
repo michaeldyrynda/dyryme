@@ -49,6 +49,11 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
+
+            $('[data-toggle="lightbox"]').click(function (e) {
+                e.preventDefault();
+                $(this).ekkoLightbox();
+            });
         });
     </script>
 @stop
