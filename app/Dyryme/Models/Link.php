@@ -15,7 +15,7 @@ class Link extends Eloquent {
 
 	use SoftDeletingTrait;
 
-	protected $fillable = [ 'hash', 'url', 'page_title', 'remoteAddress', 'hostname', 'userAgent' ];
+	protected $fillable = [ 'hash', 'url', 'page_title', 'screenshot', 'thumbnail', 'remoteAddress', 'hostname', 'userAgent' ];
 
 
 	public static function boot()
@@ -71,6 +71,24 @@ class Link extends Eloquent {
 		{
 			$this->attributes['url'] = $url;
 		}
+	}
+
+
+	/**
+	 * @param $screenshot
+	 */
+	public function setScreenshotAttribute($screenshot)
+	{
+		$this->attributes['screenshot'] = trim($screenshot) !== '' ? $screenshot : null;
+	}
+
+
+	/**
+	 * @param $thumbnail
+	 */
+	public function setThumbnailAttribute($thumbnail)
+	{
+		$this->attributes['thumbnail'] = trim($thumbnail) !== '' ? $thumbnail : null;
 	}
 
 
