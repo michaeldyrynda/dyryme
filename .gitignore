@@ -8,3 +8,5 @@ Thumbs.db
 _ide_helper.php
 .idea
 Envoy.blade.php
+app/storage/screenshots
+!app/storage/screenshots/.gitkeep
