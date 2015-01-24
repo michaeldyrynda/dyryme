@@ -101,7 +101,7 @@ class LinkController extends \BaseController {
 			\App::abort(403, 'Unauthorised Action');
 		}
 
-		$input = \Input::only('longUrl', 'description');
+		$input = \Input::only('longUrl');
 
 		list( $hash, $existing ) = $this->linkRepository->makeHash($input['longUrl']);
 
@@ -113,7 +113,6 @@ class LinkController extends \BaseController {
 
 				$link = $this->linkRepository->store([
 					'url'         => $input['longUrl'],
-					'description' => $input['description'],
 					'hash'        => $hash,
 				]);
 
