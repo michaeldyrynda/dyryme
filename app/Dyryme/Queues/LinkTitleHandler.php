@@ -3,6 +3,7 @@
 use Dyryme\Exceptions\PageTitleNotFoundException;
 use Dyryme\Repositories\LinkRepository;
 use GuzzleHttp\Client;
+use Illuminate\Queue\Jobs\Job;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -44,7 +45,7 @@ class LinkTitleHandler {
 	 * @return bool
 	 * @throws PageTitleNotFoundException
 	 */
-	public function fire($job, $data)
+	public function fire(Job $job, $data)
 	{
 		$link = $this->linkRepository->lookupById($data['id']);
 
@@ -53,13 +54,15 @@ class LinkTitleHandler {
 			// Three failed attempts is enough, forget about this link...
 			$job->delete();
 
+			\Event::fire('link.forceDeleting', [ $link, ]);
+
 			// ...it's probably dead
 			$link->forceDelete();
 
 			return true;
 		}
 
-		$title = $this->getTitle($data['url']);
+		$title = $this->getTitle($link->url);
 
 		if ( trim($title) == '' )
 		{

@@ -111,7 +111,7 @@ class LinkRepository {
 	 */
 	public function lookupById($id)
 	{
-		return $this->model->withTrashed()->find($id);
+		return $this->model->withTrashed()->findOrFail($id);
 	}
 
 
