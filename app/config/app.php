@@ -123,7 +123,8 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
         'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
-		'Wnx\ScreeenlyClient\ScreeenlyClientServiceProvicer',
+		'Wnx\ScreeenlyClient\ScreeenlyClientServiceProvider',
+		'Intervention\Image\ImageServiceProvider',
 
 	),
 
@@ -191,6 +192,7 @@ return array(
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
+		'Image' 			=> 'Intervention\Image\Facades\Image',
 
 	),
 
