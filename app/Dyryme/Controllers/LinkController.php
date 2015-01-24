@@ -7,14 +7,15 @@ use Dyryme\Repositories\HitLogRepository;
 use Dyryme\Repositories\LinkRepository;
 use Dyryme\Exceptions\ValidationFailedException;
 use Dyryme\Utilities\RemoteClient;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Link controller
  *
- * @package	Dyryme
+ * @package    Dyryme
  * @subpackage Controllers
  * @copyright  2015 IATSTUTI
- * @author	 Michael Dyrynda <michael@iatstuti.net>
+ * @author     Michael Dyrynda <michael@iatstuti.net>
  */
 class LinkController extends \BaseController {
 
@@ -32,7 +33,7 @@ class LinkController extends \BaseController {
 	/**
 	 * @param LinkRepository   $linkRepository
 	 * @param HitLogRepository $hitLogRepository
-	 * @param RemoteClient	 $remoteClient
+	 * @param RemoteClient     $remoteClient
 	 */
 	function __construct(LinkRepository $linkRepository, HitLogRepository $hitLogRepository, RemoteClient $remoteClient)
 	{
@@ -100,7 +101,12 @@ class LinkController extends \BaseController {
 			\App::abort(403, 'Unauthorised Action');
 		}
 
-		$input = \Input::only('longUrl', 'description');
+		$input = \Input::only('longUrl');
+
+		if ( ! starts_with($input['longUrl'], [ 'http://', 'https://', ]) )
+		{
+			$input['longUrl'] = sprintf('http://%s', $input['longUrl']);
+		}
 
 		list( $hash, $existing ) = $this->linkRepository->makeHash($input['longUrl']);
 
@@ -112,11 +118,11 @@ class LinkController extends \BaseController {
 
 				$link = $this->linkRepository->store([
 					'url'         => $input['longUrl'],
-					'description' => $input['description'],
 					'hash'        => $hash,
 				]);
 
-				\Queue::push('Dyryme\Queues\LinkTitleHandler', [ 'id' => $link->id, 'url' => $link->url, ]);
+				\Queue::push('Dyryme\Queues\LinkTitleHandler', [ 'id' => $link->id, ]);
+				\Queue::push('Dyryme\Queues\ScreenshotHandler', [ 'id' => $link->id, ]);
 
 				$hash = $link->hash;
 			}
@@ -143,7 +149,6 @@ class LinkController extends \BaseController {
 	public function redirect($hash)
 	{
 		$link = $this->linkRepository->lookupByHash($hash);
-
 
 		if ( ! $link )
 		{
@@ -283,6 +288,35 @@ class LinkController extends \BaseController {
 
 
 	/**
+	 * Serve the screenshot for a given link identifier
+	 *
+	 * @param $id
+	 *
+	 * @return mixed
+	 */
+	public function screenshot($id)
+	{
+		$thumbnail = \Request::has('thumb');
+
+		try
+		{
+			$link = $this->linkRepository->lookupById($id);
+
+			if ( ( $thumbnail && ! is_null($link->thumbnail) || ( ! $thumbnail && ! is_null($link->screenshot) ) ) )
+			{
+				return \Image::make($thumbnail ? $link->thumbnail : $link->screenshot)->response();
+			}
+		}
+		catch (ModelNotFoundException $e)
+		{
+			//	no-op
+		}
+
+		return \Image::make(storage_path() . '/screenshots/no_image.jpg')->response();
+	}
+
+
+	/**
 	 * @param $userId
 	 *
 	 * @throws PermissionDeniedException
@@ -305,7 +339,10 @@ class LinkController extends \BaseController {
 	{
 		$hits = $this->hitLogRepository->countByAddress($link->id);
 
-		if ( $hits > 3 ) {
+		if ( $hits > 3 )
+		{
+			\Event::fire('link.forceDeleting', [ $link, ]);
+
 			// Make it gone for good so that the user can't just re-enable it
 			$link->forceDelete();
 

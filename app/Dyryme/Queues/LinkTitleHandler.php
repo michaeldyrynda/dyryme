@@ -1,7 +1,9 @@
 <?php namespace Dyryme\Queues;
 
+use Dyryme\Exceptions\PageTitleNotFoundException;
 use Dyryme\Repositories\LinkRepository;
 use GuzzleHttp\Client;
+use Illuminate\Queue\Jobs\Job;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -41,8 +43,9 @@ class LinkTitleHandler {
 	 * @param $data
 	 *
 	 * @return bool
+	 * @throws PageTitleNotFoundException
 	 */
-	public function fire($job, $data)
+	public function fire(Job $job, $data)
 	{
 		$link = $this->linkRepository->lookupById($data['id']);
 
@@ -51,14 +54,24 @@ class LinkTitleHandler {
 			// Three failed attempts is enough, forget about this link...
 			$job->delete();
 
+			\Event::fire('link.forceDeleting', [ $link, ]);
+
 			// ...it's probably dead
 			$link->forceDelete();
 
 			return true;
 		}
 
-		$body  = $this->getUrlBody($data['url']);
-		$title = $this->getTitle($body);
+		$title = $this->getTitle($link->url);
+
+		if ( trim($title) == '' )
+		{
+			/*
+			 * HTTP connection may have timed out or page has no title, throwing an exception will release this job back
+			 * to the queue to be tried again, and tidied up as needed.
+			 */
+			throw new PageTitleNotFoundException;
+		}
 
 		if ( $link->fill([ 'page_title' => $title, ])->save() )
 		{
@@ -87,12 +100,13 @@ class LinkTitleHandler {
 
 
 	/**
-	 * @param $body
+	 * @param $url
 	 *
 	 * @return string
 	 */
-	private function getTitle($body)
+	private function getTitle($url)
 	{
+		$body    = $this->getUrlBody($url);
 		$crawler = new Crawler($body);
 
 		return $crawler->filterXPath('//title')->text();
