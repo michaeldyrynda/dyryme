@@ -1,5 +1,6 @@
 <?php namespace Dyryme\Controllers;
 
+use Carbon\Carbon;
 use Dyryme\Exceptions\LooperException;
 use Dyryme\Exceptions\PermissionDeniedException;
 use Dyryme\Models\Link;
@@ -66,8 +67,8 @@ class LinkController extends \BaseController {
 		$popular  = $this->linkRepository->getTopLinks();
 		$creators = $this->linkRepository->getTopCreators();
 
-		$start = (new \DateTime())->sub(new \DateInterval('P6D'));
-		$end   = new \DateTime();
+		$start = Carbon::createFromTime(0)->subDays(6);
+		$end   = Carbon::now();
 
 		$dailyLinksTable = $this->getDailyLinksTable($start, $end);
 		$dailyHitsTable  = $this->getDailyHitsTable($start, $end);
@@ -232,11 +233,11 @@ class LinkController extends \BaseController {
 	/**
 	 * Get the daily links data table
 	 *
-	 * @param \DateTime $start
+	 * @param Carbon $start
 	 *
 	 * @return \Lava::DataTable
 	 */
-	private function getDailyLinksTable(\DateTime $start)
+	private function getDailyLinksTable(Carbon $start)
 	{
 		return $this->getLinksTable($start, 'links', $this->linkRepository);
 	}
@@ -245,24 +246,24 @@ class LinkController extends \BaseController {
 	/**
 	 * Get the daily hits data table
 	 *
-	 * @param \DateTime $start
+	 * @param Carbon $start
 	 *
 	 * @return \Lava::DataTable
 	 */
-	private function getDailyHitsTable(\DateTime $start)
+	private function getDailyHitsTable(Carbon $start)
 	{
 		return $this->getLinksTable($start, 'hits', $this->hitLogRepository);
 	}
 
 
 	/**
-	 * @param \DateTime $start
-	 * @param           $column
-	 * @param           $repository
+	 * @param Carbon $start
+	 * @param        $column
+	 * @param        $repository
 	 *
 	 * @return mixed
 	 */
-	private function getLinksTable(\DateTime $start, $column, $repository)
+	private function getLinksTable(Carbon $start, $column, $repository)
 	{
 		$breakdown = $repository->getDailyBreakdown($start);
 
