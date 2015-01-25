@@ -20,6 +20,7 @@
                         <col style="width: 5%;"/>
                         <thead>
                         <tr>
+                            <th>Thumb</th>
                             <th>Hash</th>
                             <th>URL</th>
                             <th>Page Title</th>

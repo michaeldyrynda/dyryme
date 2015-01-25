@@ -125,6 +125,7 @@ return array(
         'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
 		'Wnx\ScreeenlyClient\ScreeenlyClientServiceProvider',
 		'Intervention\Image\ImageServiceProvider',
+		'Indatus\Dispatcher\ServiceProvider',
 
 	),
 
