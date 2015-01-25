@@ -1,9 +1,11 @@
 <?php namespace Dyryme\Commands;
 
 use Dyryme\Repositories\LinkRepository;
-use Illuminate\Console\Command;
+use Indatus\Dispatcher\Scheduling\ScheduledCommand;
+use Indatus\Dispatcher\Scheduling\Schedulable;
+use Indatus\Dispatcher\Drivers\Cron\Scheduler;
 
-class TrashedLinkCommand extends Command {
+class TrashedLinkCommand extends ScheduledCommand {
 
 	/**
 	 * The console command name.
@@ -61,6 +63,17 @@ class TrashedLinkCommand extends Command {
 		{
 			$this->info('No trashed links to clear at this time');
 		}
+	}
+
+
+	/**
+	 * @param Schedulable $scheduler
+	 *
+	 * @return mixed
+	 */
+	public function schedule(Schedulable $scheduler)
+	{
+		return $scheduler->daily()->hours(0)->minutes(30);
 	}
 
 

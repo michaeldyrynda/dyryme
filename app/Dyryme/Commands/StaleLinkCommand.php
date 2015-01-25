@@ -1,9 +1,11 @@
 <?php namespace Dyryme\Commands;
 
 use Dyryme\Repositories\LinkRepository;
-use Illuminate\Console\Command;
+use Indatus\Dispatcher\Scheduling\ScheduledCommand;
+use Indatus\Dispatcher\Scheduling\Schedulable;
+use Indatus\Dispatcher\Drivers\Cron\Scheduler;
 
-class StaleLinkCommand extends Command {
+class StaleLinkCommand extends ScheduledCommand {
 
 	/**
 	 * The console command name.
@@ -59,6 +61,17 @@ class StaleLinkCommand extends Command {
 		{
 			$this->info('No stale links to trash at this time');
 		}
+	}
+
+
+	/**
+	 * @param Schedulable $scheduler
+	 *
+	 * @return mixed
+	 */
+	public function schedule(Schedulable $scheduler)
+	{
+		return $scheduler->daily()->hours(0)->minutes(5);
 	}
 
 
