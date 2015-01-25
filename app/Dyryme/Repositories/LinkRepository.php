@@ -86,11 +86,11 @@ class LinkRepository {
 	/**
 	 * Get a daily breakdown of links created between two dates
 	 *
-	 * @param \DateTime $start
+	 * @param Carbon $start
 	 *
 	 * @return array|\Illuminate\Database\Eloquent\Collection|static[]
 	 */
-	public function getDailyBreakdown(\DateTime $start)
+	public function getDailyBreakdown(Carbon $start)
 	{
 		return $this->model->select(\DB::raw('DATE(created_at) as date'),
 			\DB::raw('COUNT(*) as links'))->groupBy(\DB::raw('DATE(created_at)'))->orderBy('created_at',
@@ -199,7 +199,7 @@ class LinkRepository {
 	 */
 	public function getStale()
 	{
-		$start = Carbon::now()->subDays(7);
+		$start = Carbon::createFromTime(0)->subDays(6);
 
 		return $this->model->where('created_at', '<', $start)->has('hits', '<', 1)->get();
 	}
@@ -210,7 +210,7 @@ class LinkRepository {
 	 */
 	public function getStaleTrashed()
 	{
-		$start = Carbon::now()->subDays(7);
+		$start = Carbon::createFromTime(0)->subDays(6);
 
 		return $this->model->onlyTrashed()->where('deleted_at', '<', $start)->get();
 	}
