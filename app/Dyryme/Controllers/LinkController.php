@@ -3,10 +3,10 @@
 use Carbon\Carbon;
 use Dyryme\Exceptions\LooperException;
 use Dyryme\Exceptions\PermissionDeniedException;
+use Dyryme\Handlers\LinkHandler;
 use Dyryme\Models\Link;
 use Dyryme\Repositories\HitLogRepository;
 use Dyryme\Repositories\LinkRepository;
-use Dyryme\Exceptions\ValidationFailedException;
 use Dyryme\Utilities\RemoteClient;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -30,19 +30,26 @@ class LinkController extends \BaseController {
 	 */
 	private $hitLogRepository;
 
+	/**
+	 * @var LinkHandler
+	 */
+	private $linkHandler;
+
 
 	/**
 	 * @param LinkRepository   $linkRepository
 	 * @param HitLogRepository $hitLogRepository
 	 * @param RemoteClient     $remoteClient
+	 * @param LinkHandler      $linkHandler
 	 */
-	function __construct(LinkRepository $linkRepository, HitLogRepository $hitLogRepository, RemoteClient $remoteClient)
+	function __construct(LinkRepository $linkRepository, HitLogRepository $hitLogRepository, RemoteClient $remoteClient, LinkHandler $linkHandler)
 	{
 		parent::__construct();
 
 		$this->linkRepository   = $linkRepository;
 		$this->hitLogRepository = $hitLogRepository;
 		$this->remoteClient     = $remoteClient;
+		$this->linkHandler      = $linkHandler;
 
 		$this->beforeFilter('auth', [ 'only' => [ 'index', 'destroy', ], ]);
 		$this->beforeFilter('acl.permitted', [ 'only' => [ 'index', ], ]);
@@ -90,48 +97,8 @@ class LinkController extends \BaseController {
 	 */
 	public function store()
 	{
-		// Try and weed out some of the bots spamming links
-		if ( is_null($this->remoteClient->getUserAgent()) )
-		{
-			\Log::info('Ignored link request from remote client with no user agent', [
-				'ipAddress' => $this->remoteClient->getIpAddress(),
-				'hostname'  => $this->remoteClient->getHostname(),
-				'userAgent' => $this->remoteClient->getUserAgent(),
-			]);
-
-			\App::abort(403, 'Unauthorised Action');
-		}
-
 		$input = \Input::only('longUrl');
-
-		if ( ! starts_with($input['longUrl'], [ 'http://', 'https://', ]) )
-		{
-			$input['longUrl'] = sprintf('http://%s', $input['longUrl']);
-		}
-
-		list( $hash, $existing ) = $this->linkRepository->makeHash($input['longUrl']);
-
-		if ( ! $existing )
-		{
-			try
-			{
-				\Event::fire('link.creating', [ [ 'url' => $input['longUrl'], 'hash' => $hash, ] ]);
-
-				$link = $this->linkRepository->store([
-					'url'         => $input['longUrl'],
-					'hash'        => $hash,
-				]);
-
-				\Queue::push('Dyryme\Queues\LinkTitleHandler', [ 'id' => $link->id, ]);
-				\Queue::push('Dyryme\Queues\ScreenshotHandler', [ 'id' => $link->id, ]);
-
-				$hash = $link->hash;
-			}
-			catch (ValidationFailedException $e)
-			{
-				return \Redirect::route('create')->withErrors($e->getErrors())->withInput();
-			}
-		}
+		$hash  = $this->linkHandler->make($input);
 
 		return \Redirect::route('create')->with([
 			'flash_message' => sprintf('Your URL has successfully been shortened to %s', link_to($hash)),
