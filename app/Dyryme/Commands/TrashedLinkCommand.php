@@ -77,4 +77,13 @@ class TrashedLinkCommand extends ScheduledCommand {
 	}
 
 
+	/**
+	 * @return array
+	 */
+	public function environment()
+	{
+		return [ 'production' ];
+	}
+
+
 }
