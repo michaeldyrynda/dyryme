@@ -36,10 +36,8 @@ class ApiController extends \BaseController {
 	 */
 	public function lookupHash($hash)
 	{
-		try
+		if ( ! is_null($link = $this->linkRepository->lookupByHash($hash)) )
 		{
-			$link = $this->linkRepository->lookupByHash($hash);
-
 			return \Response::json([
 				'error'    => false,
 				'message'  => sprintf('Found a link with hash %s', $hash),
@@ -50,18 +48,13 @@ class ApiController extends \BaseController {
 				],
 			]);
 		}
-		catch (ModelNotFoundException $e)
+		else
 		{
 			return \Response::json([
 				'error'   => true,
 				'message' => sprintf('A link with hash %s could not be found', $hash),
 			], 404);
 		}
-
-		return \Response::json([
-			'error'   => true,
-			'message' => 'An unhandled exception was encountered',
-		], 500);
 	}
 
 
