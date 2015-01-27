@@ -51,6 +51,11 @@ Route::group([ 'namespace' => 'Dyryme\Controllers', ], function()
 	Route::get('/user/links', [ 'as' => 'user.links', 'uses' => 'UserController@links', ]);
 	Route::get('/denied', [ 'as' => 'user.denied', 'uses' => 'UserController@denied', ]);
 
+	Route::group([ 'prefix' => 'api/v1', ], function ()
+	{
+		Route::get('lookup/hash/{hash}', [ 'as' => 'api.hash.lookup', 'uses' => 'ApiController@lookupHash', ]);
+	});
+
 	// Wildcard redirect routes
 	Route::get('{hash}', [ 'as' => 'redirect', 'uses' => 'LinkController@redirect', ]);
 });
