@@ -83,8 +83,8 @@ class LinkHandler {
 			\Event::fire('link.creating', [ [ 'url' => $input['longUrl'], 'hash' => $hash, ] ]);
 
 			$link = $this->linkRepository->store([
-				'url'         => $input['longUrl'],
-				'hash'        => $hash,
+				'url'  => $input['longUrl'],
+				'hash' => $hash,
 			]);
 
 			\Queue::push('Dyryme\Queues\LinkTitleHandler', [ 'id' => $link->id, ]);
