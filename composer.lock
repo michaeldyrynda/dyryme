@@ -2617,22 +2617,25 @@
         },
         {
             "name": "wnx/screeenly-client",
-            "version": "v0.2.0",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stefanzweifel/ScreeenlyClient.git",
-                "reference": "b0d8d874ae0758550a01e18fedc3983475914650"
+                "reference": "6bd7c832fc640e431bc1883fb93db29596d8b91d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stefanzweifel/ScreeenlyClient/zipball/b0d8d874ae0758550a01e18fedc3983475914650",
-                "reference": "b0d8d874ae0758550a01e18fedc3983475914650",
+                "url": "https://api.github.com/repos/stefanzweifel/ScreeenlyClient/zipball/6bd7c832fc640e431bc1883fb93db29596d8b91d",
+                "reference": "6bd7c832fc640e431bc1883fb93db29596d8b91d",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "~5",
                 "illuminate/support": "4.2.*",
                 "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.4.*"
             },
             "type": "library",
             "autoload": {
@@ -2641,14 +2644,26 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
             "authors": [
                 {
                     "name": "Stefan Zweifel",
-                    "email": "hello@stefanzweifel.io"
+                    "email": "hello@stefanzweifel.io",
+                    "homepage": "http://stefanzweifel.io",
+                    "role": "Developer & Maintainer"
                 }
             ],
             "description": "PHP API Wrapper for screeenly.com",
-            "time": "2015-01-15 19:45:21"
+            "homepage": "https://github.com/stefanzweifel/ScreeenlyClient",
+            "keywords": [
+                "api",
+                "laravel",
+                "screeenly",
+                "screenshot"
+            ],
+            "time": "2015-01-24 21:52:53"
         },
         {
             "name": "wp-cli/php-cli-tools",
