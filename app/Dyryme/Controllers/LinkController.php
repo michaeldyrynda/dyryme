@@ -44,8 +44,6 @@ class LinkController extends \BaseController {
 	 */
 	function __construct(LinkRepository $linkRepository, HitLogRepository $hitLogRepository, RemoteClient $remoteClient, LinkHandler $linkHandler)
 	{
-		parent::__construct();
-
 		$this->linkRepository   = $linkRepository;
 		$this->hitLogRepository = $hitLogRepository;
 		$this->remoteClient     = $remoteClient;
