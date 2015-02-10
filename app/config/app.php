@@ -125,6 +125,7 @@ return array(
 		'Wnx\ScreeenlyClient\ScreeenlyClientServiceProvider',
 		'Intervention\Image\ImageServiceProvider',
 		'Indatus\Dispatcher\ServiceProvider',
+		'Iatstuti\GoogleCse\GoogleCseServiceProvider',
 
 	),
 
@@ -193,6 +194,7 @@ return array(
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
 		'Image' 			=> 'Intervention\Image\Facades\Image',
+		'GoogleCse'			=> 'Iatstuti\GoogleCse\Facades\LaravelFacade',
 
 	),
 
