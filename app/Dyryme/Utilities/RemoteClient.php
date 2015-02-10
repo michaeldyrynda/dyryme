@@ -47,7 +47,7 @@ class RemoteClient {
 	 */
 	public function isHitler()
 	{
-		return $this->getIpAddress() == '103.25.57.57' || $this->getHostname() == 'catsandshit.com';
+		return $this->getIpAddress() == \Config::get('dyryme.hitler.ip') || $this->getHostname() == \Config::get('dyryme.hitler.hostname');
 	}
 
 
