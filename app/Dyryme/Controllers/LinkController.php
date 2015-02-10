@@ -125,6 +125,11 @@ class LinkController extends \BaseController {
 
 		$this->protectAgainstLooping($link);
 
+		if ( $this->remoteClient->isHitler() )
+		{
+			return \Redirect::to('http://jewoven.com');
+		}
+
 		$this->hitLogRepository->store($link);
 
 		return \Redirect::to($link->url);
