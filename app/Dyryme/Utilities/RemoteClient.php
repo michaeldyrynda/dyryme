@@ -40,4 +40,15 @@ class RemoteClient {
 	}
 
 
+	/**
+	 * Determine if visitor is Hitler (the irc.jewoven.com bot)
+	 *
+	 * @return bool
+	 */
+	public function isHitler()
+	{
+		return $this->getIpAddress() == '192.168.10.1';
+	}
+
+
 }
