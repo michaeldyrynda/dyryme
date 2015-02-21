@@ -1,47 +1,13 @@
 <?php namespace Dyryme\Utilities;
 
-
 class RemoteClient {
-
-	/**
-	 * @var string
-	 */
-	private $ipAddress;
-
-	/**
-	 * @var string
-	 */
-	private $hostname;
-
-	/**
-	 * @var string
-	 */
-	private $userAgent;
-
-	/**
-	 * @var string
-	 */
-	private $referer;
-
-
-	/**
-	 * Class constructor
-	 */
-	public function __construct()
-	{
-		$this->setIpAddress();
-		$this->setHostname();
-		$this->setUserAgent();
-        $this->setReferer();
-	}
-
 
 	/**
 	 * @return mixed
 	 */
 	public function getIpAddress()
 	{
-		return $this->ipAddress;
+		return \Request::getClientIp();
 	}
 
 
@@ -50,7 +16,9 @@ class RemoteClient {
 	 */
 	public function getHostname()
 	{
-		return $this->hostname;
+		$hostname = gethostbyaddr($this->getIpAddress());
+
+		return ( $hostname !== false && $hostname !== $this->getIpAddress() ) ? $hostname : null;
 	}
 
 
@@ -59,7 +27,7 @@ class RemoteClient {
 	 */
 	public function getUserAgent()
 	{
-		return $this->userAgent;
+		return \Request::server('HTTP_USER_AGENT');
 	}
 
 
@@ -68,46 +36,18 @@ class RemoteClient {
 	 */
 	public function getReferer()
 	{
-		return $this->referer;
+		return \Request::server('HTTP_REFERER');
 	}
 
 
 	/**
-	 * Set the IP address
+	 * Determine if visitor is Hitler (the irc.jewoven.com bot)
+	 *
+	 * @return bool
 	 */
-	private function setIpAddress()
+	public function isHitler()
 	{
-		$this->ipAddress = isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ? array_pop(explode(',',
-			$_SERVER['HTTP_X_FORWARDED_FOR'])) : $_SERVER['REMOTE_ADDR'];
-	}
-
-
-	/**
-	 * Set the hostname
-	 */
-	private function setHostname()
-	{
-		$hostname  = gethostbyaddr($this->ipAddress);
-
-		$this->hostname = ( $hostname !== false && $hostname !== $this->ipAddress ) ? $hostname : null;
-	}
-
-
-	/**
-	 * Set the user agent
-	 */
-	private function setUserAgent()
-	{
-		$this->userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null;
-	}
-
-
-	/**
-	 * Set the referer
-	 */
-	public function setReferer()
-	{
-		$this->referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
+		return $this->getIpAddress() == \Config::get('dyryme.hitler.ip') || $this->getHostname() == \Config::get('dyryme.hitler.hostname');
 	}
 
 

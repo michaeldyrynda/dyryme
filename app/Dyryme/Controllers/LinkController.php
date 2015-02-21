@@ -1,20 +1,22 @@
 <?php namespace Dyryme\Controllers;
 
+use Carbon\Carbon;
 use Dyryme\Exceptions\LooperException;
 use Dyryme\Exceptions\PermissionDeniedException;
+use Dyryme\Handlers\LinkHandler;
 use Dyryme\Models\Link;
 use Dyryme\Repositories\HitLogRepository;
 use Dyryme\Repositories\LinkRepository;
-use Dyryme\Exceptions\ValidationFailedException;
 use Dyryme\Utilities\RemoteClient;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Link controller
  *
- * @package	Dyryme
+ * @package    Dyryme
  * @subpackage Controllers
  * @copyright  2015 IATSTUTI
- * @author	 Michael Dyrynda <michael@iatstuti.net>
+ * @author     Michael Dyrynda <michael@iatstuti.net>
  */
 class LinkController extends \BaseController {
 
@@ -28,19 +30,24 @@ class LinkController extends \BaseController {
 	 */
 	private $hitLogRepository;
 
+	/**
+	 * @var LinkHandler
+	 */
+	private $linkHandler;
+
 
 	/**
 	 * @param LinkRepository   $linkRepository
 	 * @param HitLogRepository $hitLogRepository
-	 * @param RemoteClient	 $remoteClient
+	 * @param RemoteClient     $remoteClient
+	 * @param LinkHandler      $linkHandler
 	 */
-	function __construct(LinkRepository $linkRepository, HitLogRepository $hitLogRepository, RemoteClient $remoteClient)
+	function __construct(LinkRepository $linkRepository, HitLogRepository $hitLogRepository, RemoteClient $remoteClient, LinkHandler $linkHandler)
 	{
-		parent::__construct();
-
 		$this->linkRepository   = $linkRepository;
 		$this->hitLogRepository = $hitLogRepository;
 		$this->remoteClient     = $remoteClient;
+		$this->linkHandler      = $linkHandler;
 
 		$this->beforeFilter('auth', [ 'only' => [ 'index', 'destroy', ], ]);
 		$this->beforeFilter('acl.permitted', [ 'only' => [ 'index', ], ]);
@@ -65,8 +72,8 @@ class LinkController extends \BaseController {
 		$popular  = $this->linkRepository->getTopLinks();
 		$creators = $this->linkRepository->getTopCreators();
 
-		$start = (new \DateTime())->sub(new \DateInterval('P6D'));
-		$end   = new \DateTime();
+		$start = Carbon::createFromTime(0)->subDays(6);
+		$end   = Carbon::now();
 
 		$dailyLinksTable = $this->getDailyLinksTable($start, $end);
 		$dailyHitsTable  = $this->getDailyHitsTable($start, $end);
@@ -88,43 +95,8 @@ class LinkController extends \BaseController {
 	 */
 	public function store()
 	{
-		// Try and weed out some of the bots spamming links
-		if ( is_null($this->remoteClient->getUserAgent()) )
-		{
-			\Log::info('Ignored link request from remote client with no user agent', [
-				'ipAddress' => $this->remoteClient->getIpAddress(),
-				'hostname'  => $this->remoteClient->getHostname(),
-				'userAgent' => $this->remoteClient->getUserAgent(),
-			]);
-
-			\App::abort(403, 'Unauthorised Action');
-		}
-
-		$input = \Input::only('longUrl', 'description');
-
-		list( $hash, $existing ) = $this->linkRepository->makeHash($input['longUrl']);
-
-		if ( ! $existing )
-		{
-			try
-			{
-				\Event::fire('link.creating', [ [ 'url' => $input['longUrl'], 'hash' => $hash, ] ]);
-
-				$link = $this->linkRepository->store([
-					'url'         => $input['longUrl'],
-					'description' => $input['description'],
-					'hash'        => $hash,
-				]);
-
-				\Queue::push('Dyryme\Queues\LinkTitleHandler', [ 'id' => $link->id, 'url' => $link->url, ]);
-
-				$hash = $link->hash;
-			}
-			catch (ValidationFailedException $e)
-			{
-				return \Redirect::route('create')->withErrors($e->getErrors())->withInput();
-			}
-		}
+		$input = \Input::only('longUrl');
+		$hash  = $this->linkHandler->make($input);
 
 		return \Redirect::route('create')->with([
 			'flash_message' => sprintf('Your URL has successfully been shortened to %s', link_to($hash)),
@@ -144,7 +116,6 @@ class LinkController extends \BaseController {
 	{
 		$link = $this->linkRepository->lookupByHash($hash);
 
-
 		if ( ! $link )
 		{
 			return \Redirect::route('create')->with([
@@ -153,6 +124,11 @@ class LinkController extends \BaseController {
 		}
 
 		$this->protectAgainstLooping($link);
+
+		if ( $this->remoteClient->isHitler() )
+		{
+			return \Redirect::to($this->getRandomLink());
+		}
 
 		$this->hitLogRepository->store($link);
 
@@ -227,11 +203,11 @@ class LinkController extends \BaseController {
 	/**
 	 * Get the daily links data table
 	 *
-	 * @param \DateTime $start
+	 * @param Carbon $start
 	 *
 	 * @return \Lava::DataTable
 	 */
-	private function getDailyLinksTable(\DateTime $start)
+	private function getDailyLinksTable(Carbon $start)
 	{
 		return $this->getLinksTable($start, 'links', $this->linkRepository);
 	}
@@ -240,24 +216,24 @@ class LinkController extends \BaseController {
 	/**
 	 * Get the daily hits data table
 	 *
-	 * @param \DateTime $start
+	 * @param Carbon $start
 	 *
 	 * @return \Lava::DataTable
 	 */
-	private function getDailyHitsTable(\DateTime $start)
+	private function getDailyHitsTable(Carbon $start)
 	{
 		return $this->getLinksTable($start, 'hits', $this->hitLogRepository);
 	}
 
 
 	/**
-	 * @param \DateTime $start
-	 * @param           $column
-	 * @param           $repository
+	 * @param Carbon $start
+	 * @param        $column
+	 * @param        $repository
 	 *
 	 * @return mixed
 	 */
-	private function getLinksTable(\DateTime $start, $column, $repository)
+	private function getLinksTable(Carbon $start, $column, $repository)
 	{
 		$breakdown = $repository->getDailyBreakdown($start);
 
@@ -279,6 +255,35 @@ class LinkController extends \BaseController {
 	public function looper()
 	{
 		return \View::make('loop_detected');
+	}
+
+
+	/**
+	 * Serve the screenshot for a given link identifier
+	 *
+	 * @param $id
+	 *
+	 * @return mixed
+	 */
+	public function screenshot($id)
+	{
+		$thumbnail = \Request::has('thumb');
+
+		try
+		{
+			$link = $this->linkRepository->lookupById($id);
+
+			if ( ( $thumbnail && ! is_null($link->thumbnail) || ( ! $thumbnail && ! is_null($link->screenshot) ) ) )
+			{
+				return \Image::make($thumbnail ? $link->thumbnail : $link->screenshot)->response();
+			}
+		}
+		catch (ModelNotFoundException $e)
+		{
+			//	no-op
+		}
+
+		return \Image::make(storage_path() . '/screenshots/no_image.jpg')->response();
 	}
 
 
@@ -305,12 +310,33 @@ class LinkController extends \BaseController {
 	{
 		$hits = $this->hitLogRepository->countByAddress($link->id);
 
-		if ( $hits > 3 ) {
+		if ( $hits > 3 )
+		{
+			\Event::fire('link.forceDeleting', [ $link, ]);
+
 			// Make it gone for good so that the user can't just re-enable it
 			$link->forceDelete();
 
 			throw new LooperException;
 		}
+	}
+
+
+	/**
+	 * Return a random link from a Google search of 'cats'. Return jewoven in case lookup fails.
+	 *
+	 * @return string
+	 */
+	private function getRandomLink()
+	{
+		$results = \GoogleCse::search('cats');
+
+		if ( count($results) > 0 )
+		{
+			return sprintf('http://%s', $results[rand(0, count($results) - 1)]['formattedUrl']);
+		}
+
+		return 'http://jewoven.com';
 	}
 
 

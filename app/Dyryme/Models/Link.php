@@ -15,14 +15,14 @@ class Link extends Eloquent {
 
 	use SoftDeletingTrait;
 
-	protected $fillable = [ 'hash', 'url', 'page_title', 'description', 'remoteAddress', 'hostname', 'userAgent' ];
+	protected $fillable = [ 'hash', 'url', 'page_title', 'screenshot', 'thumbnail', 'remoteAddress', 'hostname', 'userAgent' ];
 
 
 	public static function boot()
 	{
 		parent::boot();
 
-		self::creating(function($model)
+		self::creating(function ($model)
 		{
 			$model->user_id = \Auth::check() ? \Auth::id() : null;
 		});
@@ -58,28 +58,21 @@ class Link extends Eloquent {
 	}
 
 
-    /**
-     * @param $value
-     */
-    public function setDescriptionAttribute($value)
-    {
-        $this->attributes['description'] = trim($value) !== '' ? trim($value) : null;
-    }
+	/**
+	 * @param $screenshot
+	 */
+	public function setScreenshotAttribute($screenshot)
+	{
+		$this->attributes['screenshot'] = trim($screenshot) !== '' ? $screenshot : null;
+	}
 
 
 	/**
-	 * @param $url
+	 * @param $thumbnail
 	 */
-	public function setUrlAttribute($url)
+	public function setThumbnailAttribute($thumbnail)
 	{
-		if ( ! starts_with($url, 'http://') && ! starts_with($url, 'https://') )
-		{
-			$this->attributes['url'] = sprintf('http://%s', $url);
-		}
-		else
-		{
-			$this->attributes['url'] = $url;
-		}
+		$this->attributes['thumbnail'] = trim($thumbnail) !== '' ? $thumbnail : null;
 	}
 
 
