@@ -9,7 +9,11 @@
 		"khill/lavacharts": "dev-master",
 		"doctrine/dbal": "~2.5",
 		"guzzlehttp/guzzle": "~5.0",
-		"iron-io/iron_mq": "~1.5"
+		"iron-io/iron_mq": "~1.5",
+		"wnx/screeenly-client": "~0.1",
+		"intervention/image": "~2.0",
+		"indatus/dispatcher": "~1.4",
+		"iatstuti/google-cse": "~1.0"
 	},
 	"autoload": {
 		"classmap": [
