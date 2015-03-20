@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-sm-12 col-md-6 col-md-offset-3">
             <h2 class="text-center">dyry.me link shortener</h2>
             {{ Form::open(array( 'route' => 'store', 'method' => 'post', )) }}
             <div class="form-group @if ( $errors->has('url') )has-error @endif">

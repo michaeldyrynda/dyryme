@@ -125,7 +125,6 @@ return array(
 		'Wnx\ScreeenlyClient\ScreeenlyClientServiceProvider',
 		'Intervention\Image\ImageServiceProvider',
 		'Indatus\Dispatcher\ServiceProvider',
-		'Iatstuti\GoogleCse\GoogleCseServiceProvider',
 
 	),
 

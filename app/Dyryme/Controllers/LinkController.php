@@ -125,11 +125,6 @@ class LinkController extends \BaseController {
 
 		$this->protectAgainstLooping($link);
 
-		if ( $this->remoteClient->isHitler() )
-		{
-			return \Redirect::to($this->getRandomLink());
-		}
-
 		$this->hitLogRepository->store($link);
 
 		return \Redirect::to($link->url);
@@ -195,8 +190,9 @@ class LinkController extends \BaseController {
 		$this->authPermissionCheck($link->user_id);
 
 		$hits = $link->hits()->orderBy('created_at', 'desc')->paginate(40);
+		$referred = $this->hitLogRepository->getReferred($linkId);
 
-		return \View::make('hits')->with(compact('link', 'hits'));
+		return \View::make('hits')->with(compact('link', 'hits', 'referred'));
 	}
 
 
@@ -319,24 +315,6 @@ class LinkController extends \BaseController {
 
 			throw new LooperException;
 		}
-	}
-
-
-	/**
-	 * Return a random link from a Google search of 'cats'. Return jewoven in case lookup fails.
-	 *
-	 * @return string
-	 */
-	private function getRandomLink()
-	{
-		$results = \GoogleCse::search('cats');
-
-		if ( count($results) > 0 )
-		{
-			return sprintf('http://%s', $results[rand(0, count($results) - 1)]['formattedUrl']);
-		}
-
-		return 'http://jewoven.com';
 	}
 
 

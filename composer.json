@@ -12,8 +12,7 @@
 		"iron-io/iron_mq": "~1.5",
 		"wnx/screeenly-client": "~0.1",
 		"intervention/image": "~2.0",
-		"indatus/dispatcher": "~1.4",
-		"iatstuti/google-cse": "~1.0"
+		"indatus/dispatcher": "~1.4"
 	},
 	"autoload": {
 		"classmap": [
