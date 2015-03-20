@@ -190,8 +190,9 @@ class LinkController extends \BaseController {
 		$this->authPermissionCheck($link->user_id);
 
 		$hits = $link->hits()->orderBy('created_at', 'desc')->paginate(40);
+		$referred = $this->hitLogRepository->getReferred($linkId);
 
-		return \View::make('hits')->with(compact('link', 'hits'));
+		return \View::make('hits')->with(compact('link', 'hits', 'referred'));
 	}
 
 

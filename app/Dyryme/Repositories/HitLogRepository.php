@@ -84,4 +84,17 @@ class HitLogRepository {
 	}
 
 
+	/**
+	 * Return the number of links that were referred to us.
+	 *
+	 * @param $id
+	 *
+	 * @return mixed
+	 */
+	public function getReferred($id)
+	{
+		return $this->model->selectRaw('COUNT(*) as count')->whereNotNull('referer')->where('id', $id)->first()->count;
+	}
+
+
 }
