@@ -317,22 +317,4 @@ class LinkController extends \BaseController {
 	}
 
 
-	/**
-	 * Return a random link from a Google search of 'cats'. Return jewoven in case lookup fails.
-	 *
-	 * @return string
-	 */
-	private function getRandomLink()
-	{
-		$results = \GoogleCse::search('cats');
-
-		if ( count($results) > 0 )
-		{
-			return sprintf('http://%s', $results[rand(0, count($results) - 1)]['formattedUrl']);
-		}
-
-		return 'http://jewoven.com';
-	}
-
-
 }
