@@ -76,7 +76,7 @@
     php artisan optimize --env={{ $env }};
 
     # Import the environment config
-    echo 'Linking .env file';
+    echo 'Linking .env.php file';
     cd {{ $release_dir }}/{{ $release }};
     ln -nfs ../../.env.php .env.php;
 
