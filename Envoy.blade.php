@@ -78,7 +78,7 @@
     # Import the environment config
     echo 'Linking .env file';
     cd {{ $release_dir }}/{{ $release }};
-    ln -nfs ../../.env .env;
+    ln -nfs ../../.env.php .env.php;
 
     # Symlink the latest release to the current directory
     echo 'Linking current release';
