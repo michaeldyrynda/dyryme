@@ -58,7 +58,7 @@
 
     echo 'Installing composer dependencies';
     cd {{ $release_dir }}/{{ $release }};
-    composer install --prefer-dist --no-scripts;
+    composer install --prefer-dist --no-scripts -q -o;
 @endtask
 
 @task('update_symlinks')
