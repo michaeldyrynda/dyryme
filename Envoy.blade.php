@@ -62,6 +62,8 @@
 @endtask
 
 @task('update_symlinks')
+    umask 002;
+
     echo 'Updating symlinks';
 
     # Remove the storage directory and replace with persistent data
