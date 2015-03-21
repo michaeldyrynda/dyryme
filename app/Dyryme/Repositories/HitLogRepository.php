@@ -93,7 +93,7 @@ class HitLogRepository {
 	 */
 	public function getReferred($id)
 	{
-		return $this->model->selectRaw('COUNT(*) as count')->whereNotNull('referer')->where('id', $id)->first()->count;
+		return $this->model->selectRaw('COUNT(*) as count')->whereNotNull('referer')->where('link_id', $id)->first()->count;
 	}
 
 
