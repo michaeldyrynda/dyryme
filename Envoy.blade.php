@@ -68,7 +68,7 @@
     echo 'Linking storage directory';
     rm -rf {{ $release_dir }}/{{ $release }}/app/storage;
     cd {{ $release_dir }}/{{ $release }};
-    ln -nfs ../../storage app/storage;
+    ln -nfs {{ $base_dir }}/storage app/storage;
 
     # Optimise installation
     echo 'Optimising installation';
