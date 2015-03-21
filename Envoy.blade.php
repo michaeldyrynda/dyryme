@@ -1,4 +1,4 @@
-@servers([ 'prod' => 'websrv.blankhosting.com'])
+@servers([ 'remote' => 'websrv.blankhosting.com'])
 
 @setup
     if ( ! isset($repo) )
@@ -20,7 +20,7 @@
     $env         = isset($env) ? $env : 'staging';
 @endsetup
 
-@macro('deploy', [ 'on' => 'prod', ])
+@macro('deploy', [ 'on' => 'remote', ])
     fetch_repo
     run_composer
     update_permissions
