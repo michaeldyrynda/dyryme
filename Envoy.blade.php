@@ -20,7 +20,7 @@
     $env         = isset($env) ? $env : 'staging';
 @endsetup
 
-@macro('stage', [ 'on' => 'prod', ])
+@macro('deploy', [ 'on' => 'prod', ])
     fetch_repo
     run_composer
     update_permissions
