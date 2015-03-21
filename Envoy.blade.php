@@ -66,9 +66,9 @@
 
     # Remove the storage directory and replace with persistent data
     echo 'Linking storage directory';
-    rm -rf {{ $release_dir }}/{{ $release }}/storage;
+    rm -rf {{ $release_dir }}/{{ $release }}/app/storage;
     cd {{ $release_dir }}/{{ $release }};
-    ln -nfs ../../storage storage;
+    ln -nfs ../../storage app/storage;
 
     # Optimise installation
     echo 'Optimising installation';
