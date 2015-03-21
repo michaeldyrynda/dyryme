@@ -23,8 +23,8 @@
 @macro('deploy', [ 'on' => 'remote', ])
     fetch_repo
     run_composer
-    update_permissions
     update_symlinks
+    update_permissions
     down
     migrate
     up
