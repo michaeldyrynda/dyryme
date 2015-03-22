@@ -12,6 +12,8 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected $commands = [
 		'Dyryme\Console\Commands\Inspire',
+        'Dyryme\Console\Commands\StaleLinkCommand',
+        'Dyryme\Console\Commands\TrashedLinkCommand',
 	];
 
 	/**
@@ -24,6 +26,9 @@ class Kernel extends ConsoleKernel {
 	{
 		$schedule->command('inspire')
 				 ->hourly();
+
+        $schedule->command('dyryme:clear-stale')->dailyAt('00:05');
+        $schedule->command('dyryme:clear-trashed')->dailyAt('00:30');
 	}
 
 }
