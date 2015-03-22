@@ -1,4 +1,4 @@
-<?php namespace App\Commands;
+<?php namespace Dyryme\Commands;
 
 abstract class Command {
 

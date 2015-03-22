@@ -1,6 +1,6 @@
-<?php namespace App\Services;
+<?php namespace Dyryme\Services;
 
-use App\User;
+use Dyryme\User;
 use Validator;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
 
