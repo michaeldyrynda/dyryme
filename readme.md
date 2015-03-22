@@ -1,1 +1,0 @@
-## dyry.me link shortener
