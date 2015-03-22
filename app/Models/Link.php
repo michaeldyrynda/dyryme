@@ -1,7 +1,7 @@
 <?php namespace Dyryme\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\SoftDeletingTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Link model
@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletingTrait;
  */
 class Link extends Eloquent {
 
-	use SoftDeletingTrait;
+	use SoftDeletes;
 
 	protected $fillable = [ 'hash', 'url', 'page_title', 'screenshot', 'thumbnail', 'remoteAddress', 'hostname', 'userAgent' ];
 

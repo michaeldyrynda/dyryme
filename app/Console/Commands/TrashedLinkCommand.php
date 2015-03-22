@@ -1,11 +1,9 @@
 <?php namespace Dyryme\Console\Commands;
 
 use Dyryme\Repositories\LinkRepository;
-use Indatus\Dispatcher\Scheduling\ScheduledCommand;
-use Indatus\Dispatcher\Scheduling\Schedulable;
-use Indatus\Dispatcher\Drivers\Cron\Scheduler;
+use Illuminate\Console\Command;
 
-class TrashedLinkCommand extends ScheduledCommand {
+class TrashedLinkCommand extends Command {
 
 	/**
 	 * The console command name.
@@ -44,7 +42,7 @@ class TrashedLinkCommand extends ScheduledCommand {
 	 *
 	 * @return mixed
 	 */
-	public function fire()
+	public function handle()
 	{
 		$links = $this->linkRepository->getStaleTrashed();
 

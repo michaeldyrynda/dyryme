@@ -1,11 +1,9 @@
 <?php namespace Dyryme\Console\Commands;
 
+use Illuminate\Console\Command;
 use Dyryme\Repositories\LinkRepository;
-use Indatus\Dispatcher\Scheduling\ScheduledCommand;
-use Indatus\Dispatcher\Scheduling\Schedulable;
-use Indatus\Dispatcher\Drivers\Cron\Scheduler;
 
-class StaleLinkCommand extends ScheduledCommand {
+class StaleLinkCommand extends Command {
 
 	/**
 	 * The console command name.
@@ -44,7 +42,7 @@ class StaleLinkCommand extends ScheduledCommand {
 	 *
 	 * @return mixed
 	 */
-	public function fire()
+	public function handle()
 	{
 		$links = $this->linkRepository->getStale();
 
