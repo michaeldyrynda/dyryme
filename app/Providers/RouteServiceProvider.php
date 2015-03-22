@@ -24,7 +24,7 @@ class RouteServiceProvider extends ServiceProvider {
 	{
 		parent::boot($router);
 
-		//
+        $router->filter('acl.permitted', 'Dyryme\Filters\AclPermittedFilter');
 	}
 
 	/**
