@@ -1,4 +1,4 @@
-<?php namespace Dyryme\Controllers;
+<?php namespace Dyryme\Http\Controllers;
 
 use Dyryme\Exceptions\ValidationFailedException;
 use Dyryme\Repositories\UserRepository;

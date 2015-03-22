@@ -1,4 +1,4 @@
-<?php namespace Dyryme\Controllers;
+<?php namespace Dyryme\Http\Controllers;
 
 /**
  * Authentication controller
