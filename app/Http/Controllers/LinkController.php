@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  * @copyright  2015 IATSTUTI
  * @author     Michael Dyrynda <michael@iatstuti.net>
  */
-class LinkController extends \BaseController {
+class LinkController extends Controller {
 
 	/**
 	 * @var LinkRepository

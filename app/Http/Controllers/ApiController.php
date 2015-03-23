@@ -1,8 +1,6 @@
 <?php namespace Dyryme\Http\Controllers;
 
-use Dyryme\Handlers\LinkHandler;
 use Dyryme\Repositories\LinkRepository;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Api Controller
@@ -12,7 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  * @copyright  2015 IATSTUTI
  * @author     Michael Dyrynda <michael@iatstuti.net>
  */
-class ApiController extends \BaseController {
+class ApiController extends Controller {
 
 	/**
 	 * @var LinkRepository

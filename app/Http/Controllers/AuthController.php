@@ -8,7 +8,7 @@
  * @copyright  2015 IATSTUTI
  * @author     Michael Dyrynda <michael@iatstuti.net>
  */
-class AuthController extends \BaseController {
+class AuthController extends Controller {
 
 	/**
 	 * Display login form
