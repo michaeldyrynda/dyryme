@@ -3,7 +3,7 @@
 use Carbon\Carbon;
 use Dyryme\Models\Link;
 use Dyryme\Utilities\RemoteClient;
-use Illuminate\Support\Str;
+use Str;
 
 /**
  * Link repository
