@@ -136,6 +136,7 @@ return [
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Collective\Html\HtmlServiceProvider',
+        'Wnx\ScreeenlyClient\ScreeenlyClientServiceProvider',
 
 		/*
 		 * Application Service Providers...
