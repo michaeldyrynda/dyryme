@@ -11,10 +11,6 @@
 |
 */
 
-if ( Auth::check() ) {
-	View::share('authUser', Auth::user());
-}
-
 // Queues
 Route::post('queue/receive', function()
 {
