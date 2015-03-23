@@ -11,7 +11,8 @@
 		"guzzlehttp/guzzle": "~5.0",
 		"iron-io/iron_mq": "~1.5",
 		"wnx/screeenly-client": "~1.0",
-		"intervention/image": "~2.0"
+		"intervention/image": "~2.0",
+		"laravelcollective/html": "~5.0"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",
