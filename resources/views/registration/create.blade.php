@@ -22,6 +22,6 @@
             <div class="controls">
                 {!! Form::button('Register', array( 'class' => 'btn btn-default', 'type' => 'submit', )) !!}
             </div>
-            {{ Form::close() }}
+            {!! Form::close() !!}
         </div>
     </div>
