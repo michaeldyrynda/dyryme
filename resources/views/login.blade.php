@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="col-sm-2 col-sm-offset-5">
+    <div class="col-sm-12 col-md-6 col-md-offset-3">
         <fieldset>
             <legend>Please Login</legend>
 
