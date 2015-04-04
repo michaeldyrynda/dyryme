@@ -1,5 +1,6 @@
 <?php namespace Dyryme\Http\Controllers;
 
+use Auth;
 use Carbon\Carbon;
 use Dyryme\Exceptions\LooperException;
 use Dyryme\Exceptions\PermissionDeniedException;
@@ -9,7 +10,12 @@ use Dyryme\Models\Link;
 use Dyryme\Repositories\HitLogRepository;
 use Dyryme\Repositories\LinkRepository;
 use Dyryme\Utilities\RemoteClient;
+use Event;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Str;
+use Image;
+use Lava;
+use Request;
 
 /**
  * Link controller
@@ -79,11 +85,11 @@ class LinkController extends Controller {
 		$dailyLinksTable = $this->getDailyLinksTable($start, $end);
 		$dailyHitsTable  = $this->getDailyHitsTable($start, $end);
 
-		\Lava::ColumnChart('DailyLinksChart')->setOptions([
+		Lava::ColumnChart('DailyLinksChart')->setOptions([
 			'datatable' => $dailyLinksTable,
 		]);
 
-		\Lava::ColumnChart('DailyHitsChart')->setOptions([
+		Lava::ColumnChart('DailyHitsChart')->setOptions([
 			'datatable' => $dailyHitsTable,
 		]);
 
@@ -205,7 +211,7 @@ class LinkController extends Controller {
 	 *
 	 * @param Carbon $start
 	 *
-	 * @return \Lava::DataTable
+	 * @return Lava::DataTable
 	 */
 	private function getDailyLinksTable(Carbon $start)
 	{
@@ -218,7 +224,7 @@ class LinkController extends Controller {
 	 *
 	 * @param Carbon $start
 	 *
-	 * @return \Lava::DataTable
+	 * @return Lava::DataTable
 	 */
 	private function getDailyHitsTable(Carbon $start)
 	{
@@ -237,8 +243,8 @@ class LinkController extends Controller {
 	{
 		$breakdown = $repository->getDailyBreakdown($start);
 
-		$table = \Lava::DataTable();
-		$table->addDateColumn('Date')->addNumberColumn(\Str::title($column))->setTimezone('Australia/Adelaide');
+		$table = Lava::DataTable();
+		$table->addDateColumn('Date')->addNumberColumn(Str::title($column))->setTimezone('Australia/Adelaide');
 
 		foreach ($breakdown as $day)
 		{
@@ -267,7 +273,7 @@ class LinkController extends Controller {
 	 */
 	public function screenshot($id)
 	{
-		$thumbnail = \Request::has('thumb');
+		$thumbnail = Request::has('thumb');
 
 		try
 		{
@@ -275,7 +281,7 @@ class LinkController extends Controller {
 
 			if ( ( $thumbnail && ! is_null($link->thumbnail) || ( ! $thumbnail && ! is_null($link->screenshot) ) ) )
 			{
-				return \Image::make($thumbnail ? $link->thumbnail : $link->screenshot)->response();
+				return Image::make($thumbnail ? $link->thumbnail : $link->screenshot)->response();
 			}
 		}
 		catch (ModelNotFoundException $e)
@@ -283,7 +289,7 @@ class LinkController extends Controller {
 			//	no-op
 		}
 
-		return \Image::make(storage_path() . '/screenshots/no_image.jpg')->response();
+		return Image::make(storage_path() . '/screenshots/no_image.jpg')->response();
 	}
 
 
@@ -294,7 +300,7 @@ class LinkController extends Controller {
 	 */
 	private function authPermissionCheck($userId)
 	{
-		if ( ! \Auth::check() || ( ! \Auth::user()->isSuperUser() && \Auth::id() !== $userId ) )
+		if ( ! Auth::check() || ( ! Auth::user()->isSuperUser() && Auth::id() !== $userId ) )
 		{
 			throw new PermissionDeniedException;
 		}
@@ -312,7 +318,7 @@ class LinkController extends Controller {
 
 		if ( $hits > 3 )
 		{
-			\Event::fire('link.forceDeleting', [ $link, ]);
+			Event::fire('link.forceDeleting', [ $link, ]);
 
 			// Make it gone for good so that the user can't just re-enable it
 			$link->forceDelete();
