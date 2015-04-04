@@ -1,10 +1,15 @@
 <?php namespace Dyryme\Queues;
 
+use Dyryme\Commands\Command;
 use Dyryme\Exceptions\PageTitleNotFoundException;
 use Dyryme\Repositories\LinkRepository;
 use Event;
 use GuzzleHttp\Client;
+use Illuminate\Contracts\Bus\SelfHandling;
+use Illuminate\Contracts\Queue\ShouldBeQueued;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Jobs\Job;
+use Illuminate\Queue\SerializesModels;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -15,7 +20,9 @@ use Symfony\Component\DomCrawler\Crawler;
  * @copyright  2015 IATSTUTI
  * @author     Michael Dyrynda <michael@iatstuti.net>
  */
-class LinkTitleHandler {
+class LinkTitleHandler extends Command implements SelfHandling, ShouldBeQueued {
+
+	use InteractsWithQueue, SerializesModels;
 
 	/**
 	 * @var LinkRepository
