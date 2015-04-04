@@ -1,6 +1,7 @@
 <?php namespace Dyryme\Listeners;
 
 use Dyryme\Models\Link;
+use File;
 
 /**
  * Link observer
@@ -18,15 +19,15 @@ class LinkForceDeletingListener {
 	public function handle(Link $link)
 	{
 		// Delete the screenshot if it exists
-		if ( ! is_null($link->screenshot) && \File::exists($link->screenshot) )
+		if ( ! is_null($link->screenshot) && File::exists($link->screenshot) )
 		{
-			\File::delete($link->screenshot);
+			File::delete($link->screenshot);
 		}
 
 		// Delete the thumbnail if it exists
-		if ( ! is_null($link->thumbnail) && \File::exists($link->thumbnail) )
+		if ( ! is_null($link->thumbnail) && File::exists($link->thumbnail) )
 		{
-			\File::delete($link->thumbnail);
+			File::delete($link->thumbnail);
 		}
 	}
 
