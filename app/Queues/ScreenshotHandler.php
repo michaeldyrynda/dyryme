@@ -88,9 +88,9 @@ class ScreenshotHandler {
 	 */
 	private function getScreenshot($link)
 	{
-		Screenshot::capture($link);
+		$screenshot = Screenshot::capture($link);
 
-		return Screenshot::store(storage_path() . '/screenshots/');
+		return $screenshot->store(storage_path() . '/screenshots/', md5($link) . '.jpg');
 	}
 
 
