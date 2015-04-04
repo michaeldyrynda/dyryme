@@ -2,6 +2,7 @@
 
 use Dyryme\Exceptions\PageTitleNotFoundException;
 use Dyryme\Repositories\LinkRepository;
+use Event;
 use GuzzleHttp\Client;
 use Illuminate\Queue\Jobs\Job;
 use Symfony\Component\DomCrawler\Crawler;
@@ -54,7 +55,7 @@ class LinkTitleHandler {
 			// Three failed attempts is enough, forget about this link...
 			$job->delete();
 
-			\Event::fire('link.forceDeleting', [ $link, ]);
+			Event::fire('link.forceDeleting', [ $link, ]);
 
 			// ...it's probably dead
 			$link->forceDelete();
