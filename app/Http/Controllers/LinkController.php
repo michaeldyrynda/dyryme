@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Dyryme\Exceptions\LooperException;
 use Dyryme\Exceptions\PermissionDeniedException;
 use Dyryme\Handlers\LinkHandler;
+use Dyryme\Http\Requests\CreateLinkRequest;
 use Dyryme\Models\Link;
 use Dyryme\Repositories\HitLogRepository;
 use Dyryme\Repositories\LinkRepository;
@@ -59,7 +60,7 @@ class LinkController extends Controller {
 	 */
 	public function create()
 	{
-		return \View::make('home');
+		return view('home');
 	}
 
 
@@ -86,19 +87,22 @@ class LinkController extends Controller {
 			'datatable' => $dailyHitsTable,
 		]);
 
-		return \View::make('list')->with(compact('links', 'popular', 'creators'));
+		return view('list', compact('links', 'popular', 'creators'));
 	}
 
 
 	/**
 	 * Store a url in the database
+	 *
+	 * @param CreateLinkRequest $request
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function store()
+	public function store(CreateLinkRequest $request)
 	{
-		$input = \Input::only('longUrl');
-		$hash  = $this->linkHandler->make($input);
+		$hash = $this->linkHandler->make($request->only('longUrl'));
 
-		return \Redirect::route('create')->with([
+		return redirect()->route('create')->with([
 			'flash_message' => sprintf('Your URL has successfully been shortened to %s', link_to($hash)),
 			'hash'          => $hash,
 		]);
@@ -118,7 +122,7 @@ class LinkController extends Controller {
 
 		if ( ! $link )
 		{
-			return \Redirect::route('create')->with([
+			return redirect()->route('create')->with([
 				'flash_message' => 'The specified short url could not be found',
 			]);
 		}
@@ -127,7 +131,7 @@ class LinkController extends Controller {
 
 		$this->hitLogRepository->store($link);
 
-		return \Redirect::to($link->url);
+		return redirect($link->url);
 	}
 
 
@@ -149,7 +153,7 @@ class LinkController extends Controller {
 
 		$flash_message = 'Successfully deleted link with id ' . e($id);
 
-		return \Redirect::back()->with(compact('flash_message'));
+		return back()->with(compact('flash_message'));
 	}
 
 
@@ -171,7 +175,7 @@ class LinkController extends Controller {
 
 		$flash_message = 'Successfully restored link with id ' . e($id);
 
-		return \Redirect::back()->with(compact('flash_message'));
+		return back()->with(compact('flash_message'));
 	}
 
 
@@ -192,7 +196,7 @@ class LinkController extends Controller {
 		$hits = $link->hits()->orderBy('created_at', 'desc')->paginate(40);
 		$referred = $this->hitLogRepository->getReferred($linkId);
 
-		return \View::make('hits')->with(compact('link', 'hits', 'referred'));
+		return view('hits')->with(compact('link', 'hits', 'referred'));
 	}
 
 
@@ -250,7 +254,7 @@ class LinkController extends Controller {
 	 */
 	public function looper()
 	{
-		return \View::make('loop_detected');
+		return view('loop_detected');
 	}
 
 
