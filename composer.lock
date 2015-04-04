@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b708998de2559b84cc77aeab53b03ad3",
+    "hash": "1f8a241dbc8f1e89d2ed0f72b4315bc5",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -1123,16 +1123,16 @@
         },
         {
             "name": "khill/lavacharts",
-            "version": "dev-master",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kevinkhill/lavacharts.git",
-                "reference": "0defb447d0c42b4cb436d3d5cd246b7b8014c814"
+                "reference": "2151037c80a40ac8d50da71a875b2af627e86df7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kevinkhill/lavacharts/zipball/0defb447d0c42b4cb436d3d5cd246b7b8014c814",
-                "reference": "0defb447d0c42b4cb436d3d5cd246b7b8014c814",
+                "url": "https://api.github.com/repos/kevinkhill/lavacharts/zipball/2151037c80a40ac8d50da71a875b2af627e86df7",
+                "reference": "2151037c80a40ac8d50da71a875b2af627e86df7",
                 "shasum": ""
             },
             "require": {
@@ -1171,7 +1171,7 @@
                 "google",
                 "graphs"
             ],
-            "time": "2015-04-04 06:54:32"
+            "time": "2015-04-04 06:01:27"
         },
         {
             "name": "laravel/framework",
@@ -3946,9 +3946,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "khill/lavacharts": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

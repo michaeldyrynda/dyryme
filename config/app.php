@@ -136,6 +136,8 @@ return [
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Collective\Html\HtmlServiceProvider',
+		'Wnx\ScreeenlyClient\ScreeenlyClientServiceProvider',
+		'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
 
 		/*
 		 * Application Service Providers...
