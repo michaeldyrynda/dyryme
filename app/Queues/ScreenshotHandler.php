@@ -5,6 +5,7 @@ use GuzzleHttp\Exception\ServerException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Queue\Jobs\Job;
 use Intervention\Image\Facades\Image;
+use Screenshot;
 
 /**
  * Screenshot queue handler
@@ -87,9 +88,9 @@ class ScreenshotHandler {
 	 */
 	private function getScreenshot($link)
 	{
-		\Screenshot::capture($link);
+		Screenshot::capture($link);
 
-		return \Screenshot::store(storage_path() . '/screenshots/');
+		return Screenshot::store(storage_path() . '/screenshots/');
 	}
 
 
