@@ -4,7 +4,7 @@
             <img src="{{ route('screenshot', [ $link->id, 'thumb' => 1, ]) }}" />
         @if ( $link->screenshot )</a>@endif
     </td>
-    <td>{{ link_to($link->hash, $link->hash) }} ({!! link_to_route('link.hits', $link->hits->count(), [ $link->id, ]) !!})</td>
+    <td>{!! link_to($link->hash, $link->hash) !!} ({!! link_to_route('link.hits', $link->hits->count(), [ $link->id, ]) !!})</td>
     <td><span data-toggle="tooltip" title="{{ $link->url }}">{!! link_to($link->url, str_limit($link->url, 50)) !!}</td>
     <td>
         @if ( $link->page_title )
