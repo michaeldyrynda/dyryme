@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  * @copyright  2015 IATSTUTI
  * @author     Michael Dyrynda <michael@iatstuti.net>
  */
-class ApiController extends \BaseController {
+class ApiController extends Controller {
 
 	/**
 	 * @var LinkRepository

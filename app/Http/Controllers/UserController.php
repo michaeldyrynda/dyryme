@@ -11,7 +11,7 @@ use Dyryme\Repositories\UserRepository;
  * @copyright  2015 IATSTUTI
  * @author     Michael Dyrynda <michael@iatstuti.net>
  */
-class UserController extends \BaseController {
+class UserController extends Controller {
 
 	/**
 	 * @var UserRepository
