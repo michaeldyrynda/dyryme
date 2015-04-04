@@ -75,16 +75,16 @@
     cd {{ $release_dir }}/{{ $release }};
     ln -nfs {{ $base_dir }}/.env .env;
 
+    # Symlink the latest release to the current directory
+    echo 'Linking current release';
+    ln -nfs {{ $release_dir }}/{{ $release }} {{ $current_dir }};
+
     # Optimise installation
     echo 'Optimising installation';
     php artisan clear-compiled --env={{ $env }};
     php artisan optimize --env={{ $env }};
     php artisan config:cache --env={{ $env }};
     php artisan route:cache --env={{ $env }};
-
-    # Symlink the latest release to the current directory
-    echo 'Linking current release';
-    ln -nfs {{ $release_dir }}/{{ $release }} {{ $current_dir }};
 @endtask
 
 @task('migrate')
