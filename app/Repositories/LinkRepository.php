@@ -3,6 +3,7 @@
 use Carbon\Carbon;
 use Dyryme\Models\Link;
 use Dyryme\Utilities\RemoteClient;
+use Illuminate\Support\Str;
 
 /**
  * Link repository
@@ -187,7 +188,7 @@ class LinkRepository {
 		// Ensure we don't duplicate hash values, causing validation errors
 		do
 		{
-			$hash = \Str::random(5);
+			$hash = Str::random(5);
 		} while ( ! is_null($this->lookupByHash($hash)));
 
 		return [ $hash, false ];
