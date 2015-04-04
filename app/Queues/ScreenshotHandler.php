@@ -1,9 +1,14 @@
 <?php namespace Dyryme\Queues;
 
+use Dyryme\Commands\Command;
 use Dyryme\Repositories\LinkRepository;
 use GuzzleHttp\Exception\ServerException;
+use Illuminate\Contracts\Bus\SelfHandling;
+use Illuminate\Contracts\Queue\ShouldBeQueued;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Jobs\Job;
+use Illuminate\Queue\SerializesModels;
 use Intervention\Image\Facades\Image;
 use Screenshot;
 
@@ -15,7 +20,9 @@ use Screenshot;
  * @copyright  2015 IATSTUTI
  * @author     Michael Dyrynda <michael@iatstuti.net>
  */
-class ScreenshotHandler {
+class ScreenshotHandler extends Command implements SelfHandling, ShouldBeQueued {
+
+	use InteractsWithQueue, SerializesModels;
 
 	/**
 	 * @var LinkRepository
