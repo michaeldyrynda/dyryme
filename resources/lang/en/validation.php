@@ -91,6 +91,8 @@ return [
 		],
 	],
 
+	'no_recursion' => 'Nice try',
+
 	/*
 	|--------------------------------------------------------------------------
 	| Custom Validation Attributes
