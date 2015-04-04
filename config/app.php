@@ -145,6 +145,7 @@ return [
 		'Dyryme\Providers\ConfigServiceProvider',
 		'Dyryme\Providers\EventServiceProvider',
 		'Dyryme\Providers\RouteServiceProvider',
+		'Dyryme\Providers\ValidationServiceProvider',
 
 	],
 

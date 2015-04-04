@@ -11,7 +11,10 @@ class ValidationServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		//
+		$this->app['validator']->extend('no_recursion', function ($attribute, $value, $parameters)
+		{
+			return ! starts_with($value, [ 'http://dyry.me', 'https://dyry.me', ]);
+		});
 	}
 
 	/**
@@ -21,10 +24,7 @@ class ValidationServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		Validator::extend('no_recursion', function ($attribute, $value, $parameters)
-		{
-			return ! starts_with($value, [ 'http://dyry.me', 'https://dyry.me', ]);
-		});
+		//
 	}
 
 }
