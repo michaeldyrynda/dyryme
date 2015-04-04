@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            {!! link_to_route('create', 'dyry.me', null, [ 'class' => 'navbar-brand', ]) !!}
+            {!! link_to_route('create', 'dyry.me', [], [ 'class' => 'navbar-brand', ]) !!}
         </div>
 
         <div class="collapse navbar-collapse" id="navbar-collapse">
