@@ -11,10 +11,6 @@
 |
 */
 
-if ( Auth::check() ) {
-	View::share('authUser', Auth::user());
-}
-
 // Queues
 Route::post('queue/receive', function()
 {
@@ -22,7 +18,7 @@ Route::post('queue/receive', function()
 });
 
 Route::get('/', [ 'as' => 'create', 'uses' => 'LinkController@create', ]);
-Route::post('store', [ 'as' => 'store', 'before' => 'csrf', 'uses' => 'LinkController@store', ]);
+Route::post('store', [ 'as' => 'store', 'middleware' => 'csrf', 'uses' => 'LinkController@store', ]);
 Route::get('screenshot/{id}', [ 'as' => 'screenshot', 'uses' => 'LinkController@screenshot', ]);
 
 Route::get('looper', [ 'as' => 'loop_detected', 'uses' => 'LinkController@looper', ]);
@@ -31,19 +27,19 @@ Route::get('looper', [ 'as' => 'loop_detected', 'uses' => 'LinkController@looper
 Route::group([ 'prefix' => 'link', 'before' => 'auth', ], function ()
 {
 	Route::get('list', [ 'as' => 'list', 'uses' => 'LinkController@index', ]);
-	Route::delete('{id}', [ 'as' => 'link.destroy', 'before' => 'auth|csrf', 'uses' => 'LinkController@destroy', ]);
-	Route::put('{id}', [ 'as' => 'link.activate', 'before' => 'auth|csrf', 'uses' => 'LinkController@activate', ]);
+	Route::delete('{id}', [ 'as' => 'link.destroy', 'middldeware' => 'auth|csrf', 'uses' => 'LinkController@destroy', ]);
+	Route::put('{id}', [ 'as' => 'link.activate', 'middleware' => 'auth|csrf', 'uses' => 'LinkController@activate', ]);
 	Route::get('{id}/hits', [ 'as' => 'link.hits', 'uses' => 'LinkController@hits', ]);
 });
 
 // Authentication routes
 Route::get('login', [ 'as' => 'login', 'uses' => 'AuthController@login', ]);
-Route::post('login', [ 'as' => 'authenticate', 'before' => 'csrf', 'uses' => 'AuthController@authenticate', ]);
+Route::post('login', [ 'as' => 'authenticate', 'middleware' => 'csrf', 'uses' => 'AuthController@authenticate', ]);
 Route::get('logout', [ 'as' => 'logout', 'uses' => 'AuthController@logout', ]);
 
 // Registration routes
 Route::get('register', [ 'as' => 'register', 'uses' => 'RegistrationController@create', ]);
-Route::post('register', [ 'as' => 'register', 'before' => 'csrf', 'uses' => 'RegistrationController@store', ]);
+Route::post('register', [ 'as' => 'register', 'middleware' => 'csrf', 'uses' => 'RegistrationController@store', ]);
 
 // User routes
 Route::get('/user/links', [ 'as' => 'user.links', 'uses' => 'UserController@links', ]);
