@@ -33,7 +33,7 @@
 
             </div>
 
-            {{ $hits->links() }}
+            {!! $hits->render() !!}
         </div>
     </div>
 @stop

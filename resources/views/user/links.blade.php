@@ -41,7 +41,7 @@
 
             </div>
 
-            {{ $links->links() }}
+            {!! $links->render() !!}
         </div>
     </div>
 @stop
