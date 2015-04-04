@@ -1,5 +1,7 @@
 <?php namespace Dyryme\Repositories;
 
+use Dyryme\Models\User;
+
 /**
  * User repository
  *
@@ -17,9 +19,9 @@ class UserRepository {
 
 
 	/**
-	 * @param \User $model
+	 * @param User $model
 	 */
-	function __construct(\User $model)
+	function __construct(User $model)
 	{
 		$this->model = $model;
 	}
