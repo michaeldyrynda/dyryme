@@ -2,6 +2,7 @@
 
 use Dyryme\Commands\Command;
 use Dyryme\Repositories\LinkRepository;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldBeQueued;
@@ -57,10 +58,7 @@ class ScreenshotHandler extends Command implements SelfHandling, ShouldBeQueued 
 
 		try
 		{
-			$link = $this->linkRepository->lookupById($data['id']);
-
-			$local_path = $this->cropScreenshot($this->getScreenshot($link->url));
-			$thumbnail  = $this->makeThumbnail($local_path);
+			list( $link, $local_path, $thumbnail ) = $this->makeScreenshot($data);
 
 			if ( $link->fill([ 'screenshot' => $local_path, 'thumbnail' => $thumbnail, ])->save() )
 			{
@@ -72,6 +70,11 @@ class ScreenshotHandler extends Command implements SelfHandling, ShouldBeQueued 
 			$job->release();
 
 			return false;
+		}
+		catch (ClientException $e)
+		{
+			//	Couldn't hit screeenly API, try again later
+			$job->release();
 		}
 		catch (ModelNotFoundException $e)
 		{
@@ -145,6 +148,22 @@ class ScreenshotHandler extends Command implements SelfHandling, ShouldBeQueued 
 		$image->save($path);
 
 		return $path;
+	}
+
+
+	/**
+	 * @param $data
+	 *
+	 * @return array
+	 */
+	public function makeScreenshot($data)
+	{
+		$link = $this->linkRepository->lookupById($data['id']);
+
+		$local_path = $this->cropScreenshot($this->getScreenshot($link->url));
+		$thumbnail  = $this->makeThumbnail($local_path);
+
+		return array( $link, $local_path, $thumbnail );
 	}
 
 }

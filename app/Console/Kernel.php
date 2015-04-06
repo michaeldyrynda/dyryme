@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel {
 		'Dyryme\Console\Commands\Inspire',
         'Dyryme\Console\Commands\StaleLinkCommand',
         'Dyryme\Console\Commands\TrashedLinkCommand',
+		'Dyryme\Console\Commands\MissingScreenshotCommand',
 	];
 
 	/**

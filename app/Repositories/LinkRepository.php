@@ -217,4 +217,22 @@ class LinkRepository {
 	}
 
 
+	/**
+	 * Get links with no screenshot.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection|static[]
+	 */
+	public function missingScreenshots($limit = null)
+	{
+		$query = $this->model->whereNull('screenshot');
+
+		if ( ! is_null($limit) )
+		{
+			$query = $query->limit($limit);
+		}
+
+		return $query->latest()->get();
+	}
+
+
 }
