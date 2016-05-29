@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b40521f67660d099c72d9ee271bb539d",
-    "content-hash": "78f0c050b90bde954bd525fa64cef914",
+    "hash": "327d736701cd511d4bd77442f62fd313",
+    "content-hash": "34fbe0d0afe4cdb0b82a4864200a146e",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -1139,29 +1139,31 @@
         },
         {
             "name": "khill/lavacharts",
-            "version": "2.4.2",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kevinkhill/lavacharts.git",
-                "reference": "04fda52a0b79e122919cf66ec4fd9937068be995"
+                "reference": "c95cf815948db511c9c44270d50f7bc37861d81d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kevinkhill/lavacharts/zipball/04fda52a0b79e122919cf66ec4fd9937068be995",
-                "reference": "04fda52a0b79e122919cf66ec4fd9937068be995",
+                "url": "https://api.github.com/repos/kevinkhill/lavacharts/zipball/c95cf815948db511c9c44270d50f7bc37861d81d",
+                "reference": "c95cf815948db511c9c44270d50f7bc37861d81d",
                 "shasum": ""
             },
             "require": {
                 "nesbot/carbon": "~1.14",
-                "php": ">=5.3.0"
+                "php": ">=5.4.0"
             },
             "require-dev": {
                 "mockery/mockery": "~0.9",
                 "mybuilder/phpunit-accelerator": "~1.1",
                 "phpunit/phpunit": "~4.5",
-                "sami/sami": "~2.0",
-                "satooshi/php-coveralls": "~0.6",
-                "squizlabs/php_codesniffer": "~2.0"
+                "satooshi/php-coveralls": "~1.0",
+                "squizlabs/php_codesniffer": "~2.5"
+            },
+            "suggest": {
+                "khill/datatableplus": "Adds extra features to DataTables such as csv and laravel collection parsing."
             },
             "type": "library",
             "autoload": {
@@ -1177,7 +1179,42 @@
                 {
                     "name": "Kevin Hill",
                     "email": "kevinkhill@gmail.com",
-                    "role": "Developer"
+                    "role": "Creator"
+                },
+                {
+                    "name": "deringer",
+                    "homepage": "https://github.com/deringer",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "stevebauman",
+                    "homepage": "https://github.com/stevebauman",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "rajivseelam",
+                    "homepage": "https://github.com/rajivseelam",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "tobias-kuendig",
+                    "homepage": "https://github.com/tobias-kuendig",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "Stonos",
+                    "homepage": "https://github.com/Stonos",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "MicahKV",
+                    "email": "micah138@yahoo.com",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "SendDerek",
+                    "homepage": "https://github.com/SendDerek",
+                    "role": "Contributor"
                 }
             ],
             "description": "PHP wrapper library for the Google Chart API",
@@ -1187,7 +1224,7 @@
                 "google",
                 "graphs"
             ],
-            "time": "2015-04-14 01:54:27"
+            "time": "2016-04-28 14:43:39"
         },
         {
             "name": "laravel/framework",
