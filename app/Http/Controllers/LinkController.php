@@ -85,13 +85,9 @@ class LinkController extends Controller {
 		$dailyLinksTable = $this->getDailyLinksTable($start, $end);
 		$dailyHitsTable  = $this->getDailyHitsTable($start, $end);
 
-		Lava::ColumnChart('DailyLinksChart')->setOptions([
-			'datatable' => $dailyLinksTable,
-		]);
+        Lava::ColumnChart('DailyLinksChart', $dailyLinksTable);
 
-		Lava::ColumnChart('DailyHitsChart')->setOptions([
-			'datatable' => $dailyHitsTable,
-		]);
+        Lava::ColumnChart('DailyHitsChart', $dailyHitsTable);
 
 		return view('list', compact('links', 'popular', 'creators'));
 	}
