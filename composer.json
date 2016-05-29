@@ -5,14 +5,14 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"laravel/framework": "5.0.*",
-		"khill/lavacharts": "2.4.*",
+		"laravel/framework": "5.1.*",
+		"khill/lavacharts": "3.0.*",
 		"doctrine/dbal": "~2.5",
 		"guzzlehttp/guzzle": "~5.0",
-		"iron-io/iron_mq": "~1.5",
+		"iron-io/iron_mq": "~2.0|~4.0",
 		"wnx/screeenly-client": "~1.0",
 		"intervention/image": "~2.1",
-        "laravelcollective/html": "~5.0",
+        "laravelcollective/html": "~5.1",
 		"symfony/dom-crawler": "~2.6"
 	},
 	"require-dev": {
