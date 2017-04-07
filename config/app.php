@@ -78,9 +78,9 @@ return [
 	|
 	*/
 
-	'key' => env('APP_KEY', 'SomeRandomString'),
+	'key' => env('APP_KEY'),
 
-	'cipher' => MCRYPT_RIJNDAEL_128,
+	'cipher' => 'AES-256-CBC',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -138,7 +138,7 @@ return [
 		'Illuminate\View\ViewServiceProvider',
 		'Collective\Html\HtmlServiceProvider',
 		'Wnx\ScreeenlyClient\ScreeenlyClientServiceProvider',
-		'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
+        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
 		'Intervention\Image\ImageServiceProvider',
 
 		/*
